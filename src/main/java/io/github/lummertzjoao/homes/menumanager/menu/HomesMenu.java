@@ -1,4 +1,4 @@
-package io.github.lummertzjoao.homes.menumanager;
+package io.github.lummertzjoao.homes.menumanager.menu;
 
 import java.util.List;
 
@@ -9,7 +9,9 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 
 import io.github.lummertzjoao.homes.Main;
 import io.github.lummertzjoao.homes.domain.Home;
-import io.github.lummertzjoao.homes.utils.CommonUtils;
+import io.github.lummertzjoao.homes.menumanager.PaginatedMenu;
+import io.github.lummertzjoao.homes.menumanager.PlayerMenuUtility;
+import io.github.lummertzjoao.homes.util.CommonUtils;
 
 public class HomesMenu extends PaginatedMenu {
 

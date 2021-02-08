@@ -7,7 +7,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import io.github.lummertzjoao.homes.Main;
-import io.github.lummertzjoao.homes.menumanager.HomesMenu;
+import io.github.lummertzjoao.homes.menumanager.menu.HomesMenu;
 
 public class HomesCommand implements CommandExecutor {
 

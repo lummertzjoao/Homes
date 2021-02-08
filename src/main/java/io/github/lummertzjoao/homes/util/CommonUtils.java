@@ -1,4 +1,4 @@
-package io.github.lummertzjoao.homes.utils;
+package io.github.lummertzjoao.homes.util;
 
 import java.util.List;
 
