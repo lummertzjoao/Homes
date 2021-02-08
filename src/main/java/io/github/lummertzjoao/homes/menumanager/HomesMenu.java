@@ -9,6 +9,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 
 import io.github.lummertzjoao.homes.Main;
 import io.github.lummertzjoao.homes.domain.Home;
+import io.github.lummertzjoao.homes.utils.CommonUtils;
 
 public class HomesMenu extends PaginatedMenu {
 
@@ -33,14 +34,14 @@ public class HomesMenu extends PaginatedMenu {
 					open();
 				} else {
 					player.sendMessage(
-							Main.ERROR_MESSAGE_PREFIX + ChatColor.RED + "You are already on the first page.");
+							CommonUtils.ERROR_MESSAGE_PREFIX + ChatColor.RED + "You are already on the first page.");
 				}
 			} else {
 				if (index + 1 < playerHomes.size()) {
 					page += 1;
 					open();
 				} else {
-					player.sendMessage(Main.ERROR_MESSAGE_PREFIX + ChatColor.RED + "You are on the last page.");
+					player.sendMessage(CommonUtils.ERROR_MESSAGE_PREFIX + ChatColor.RED + "You are on the last page.");
 				}
 			}
 		}
