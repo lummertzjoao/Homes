@@ -1,4 +1,8 @@
 name: Homes
 main: io.github.lummertzjoao.homes.Main
+author: w1zD_
 version: 1.0
 api-version: 1.16
+
+commands:
+  homes:

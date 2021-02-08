@@ -7,6 +7,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import io.github.lummertzjoao.homes.Main;
+import io.github.lummertzjoao.homes.menumanager.HomesMenu;
 
 public class HomesCommand implements CommandExecutor {
 
@@ -21,8 +22,8 @@ public class HomesCommand implements CommandExecutor {
 			Bukkit.getLogger().info("This command can not be executed from console.");
 			return false;
 		}
-		// open menu
-		
+		Player player = (Player) sender;
+		new HomesMenu(main.getPlayerMenuUtility(player), main).open();
 		return true;
 	}
 }
