@@ -26,16 +26,32 @@ public class HomesMenu extends PaginatedMenu {
 		Player player = (Player) event.getWhoClicked();
 		List<Home> playerHomes = main.getPlayerHomesList(player);
 		Material type = event.getCurrentItem().getType();
-		
+
 		if (type == Material.BEACON) {
 			player.closeInventory();
-			Conversation conversation = main.getConversationFactory()
-					.withLocalEcho(false)
-					.withFirstPrompt(new HomeNamePrompt(this))
-					.buildConversation(player);
+			Conversation conversation = main.getConversationFactory().withLocalEcho(false)
+					.withFirstPrompt(new HomeNamePrompt(this)).buildConversation(player);
 			conversation.begin();
+			return;
 		} else if (CommonUtils.icons.contains(type)) {
-			// TODO
+			// Getting home by its name
+			Home clickedHome = null;
+			String name = ChatColor.stripColor(event.getCurrentItem().getItemMeta().getDisplayName());
+			for (Home home : playerHomes) {
+				if (home.getName().equals(name)) {
+					clickedHome = home;
+					break;
+				}
+			}
+			if (event.isLeftClick()) {
+				player.teleport(clickedHome.getLocation());
+				player.sendMessage(CommonUtils.INFO_MESSAGE_PREFIX + "You have been teleported to home "
+						+ ChatColor.GOLD + name + ChatColor.GREEN + ".");			
+			} else {
+				playerMenuUtility.setSelectedHome(clickedHome);
+				new HomeEditMenu(playerMenuUtility, main).open();
+			}
+			return;
 		} else if (type.equals(Material.DARK_OAK_DOOR)) {
 			player.closeInventory();
 			return;
@@ -57,6 +73,7 @@ public class HomesMenu extends PaginatedMenu {
 					player.sendMessage(CommonUtils.ERROR_MESSAGE_PREFIX + ChatColor.RED + "You are on the last page.");
 				}
 			}
+			return;
 		}
 	}
 
@@ -75,7 +92,10 @@ public class HomesMenu extends PaginatedMenu {
 				Home home = playerHomes.get(index);
 				if (home != null) {
 					inventory.addItem(createItem(home.getIcon(), ChatColor.GREEN + "" + ChatColor.BOLD + home.getName(),
-							ChatColor.GRAY + "Click here for more information"));
+							ChatColor.GRAY + "" + ChatColor.UNDERLINE + "Left click" + ChatColor.RESET + ChatColor.GRAY
+									+ " to teleport to this home",
+							ChatColor.GRAY + "" + ChatColor.UNDERLINE + "Right click" + ChatColor.RESET + ChatColor.GRAY
+									+ " to edit this home"));
 				}
 			}
 		}

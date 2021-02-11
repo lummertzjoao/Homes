@@ -6,7 +6,7 @@ import org.bukkit.entity.Player;
 
 public class Home {
 
-	private final String name;
+	private String name;
 	private final Location location;
 	private final Player owner;
 	private Material icon;
@@ -29,6 +29,10 @@ public class Home {
 		return name;
 	}
 
+	public void setName(String name) {
+		this.name = name;
+	}
+	
 	public Location getLocation() {
 		return location;
 	}
