@@ -44,4 +44,9 @@ public class Home {
 	public void setIcon(Material icon) {
 		this.icon = icon;
 	}
+
+	@Override
+	public String toString() {
+		return "Home [name=" + name + ", location=" + location + ", owner=" + owner + ", icon=" + icon + "]";
+	}
 }

@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.bukkit.conversations.ConversationFactory;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -15,11 +16,14 @@ import io.github.lummertzjoao.homes.menumanager.PlayerMenuUtility;
 
 public class Main extends JavaPlugin {
 
+	private ConversationFactory conversationFactory;;
+	
 	private final Map<Player, List<Home>> homes = new HashMap<>();
 	private final Map<Player, PlayerMenuUtility> playerMenuUtilityMap = new HashMap<>();
 
 	@Override
 	public void onEnable() {
+		conversationFactory = new ConversationFactory(this);
 		getCommand("homes").setExecutor(new HomesCommand(this));
 		getServer().getPluginManager().registerEvents(new MenuListener(), this);
 		getLogger().info("The plugin has been enabled successfully!");
@@ -30,6 +34,10 @@ public class Main extends JavaPlugin {
 		getLogger().info("The plugin has been disabled successfully!");
 	}
 
+	public ConversationFactory getConversationFactory() {
+		return conversationFactory;
+	}
+	
 	public Map<Player, List<Home>> getHomes() {
 		return homes;
 	}
@@ -38,6 +46,7 @@ public class Main extends JavaPlugin {
 		List<Home> playerHomes = homes.get(player);
 		if (playerHomes == null) {
 			playerHomes = new ArrayList<>();
+			homes.put(player, playerHomes);
 		}
 		return playerHomes;
 	}

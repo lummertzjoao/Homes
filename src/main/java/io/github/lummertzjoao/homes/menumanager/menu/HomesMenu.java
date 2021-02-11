@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.conversations.Conversation;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 
@@ -11,6 +12,7 @@ import io.github.lummertzjoao.homes.Main;
 import io.github.lummertzjoao.homes.domain.Home;
 import io.github.lummertzjoao.homes.menumanager.PaginatedMenu;
 import io.github.lummertzjoao.homes.menumanager.PlayerMenuUtility;
+import io.github.lummertzjoao.homes.prompt.HomeNamePrompt;
 import io.github.lummertzjoao.homes.util.CommonUtils;
 
 public class HomesMenu extends PaginatedMenu {
@@ -25,7 +27,16 @@ public class HomesMenu extends PaginatedMenu {
 		List<Home> playerHomes = main.getPlayerHomesList(player);
 		Material type = event.getCurrentItem().getType();
 		
-		if (type.equals(Material.DARK_OAK_DOOR)) {
+		if (type == Material.BEACON) {
+			player.closeInventory();
+			Conversation conversation = main.getConversationFactory()
+					.withLocalEcho(false)
+					.withFirstPrompt(new HomeNamePrompt(this))
+					.buildConversation(player);
+			conversation.begin();
+		} else if (CommonUtils.icons.contains(type)) {
+			// TODO
+		} else if (type.equals(Material.DARK_OAK_DOOR)) {
 			player.closeInventory();
 			return;
 		} else if (type.equals(Material.DARK_OAK_BUTTON)) {

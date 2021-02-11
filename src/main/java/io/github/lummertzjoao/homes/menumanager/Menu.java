@@ -14,11 +14,11 @@ import io.github.lummertzjoao.homes.Main;
 
 public abstract class Menu implements InventoryHolder {
 
-	protected PlayerMenuUtility playerMenuUtility;
+	protected final PlayerMenuUtility playerMenuUtility;
 	protected Inventory inventory;
 	protected final ItemStack FILLER_GLASS = createItem(Material.GRAY_STAINED_GLASS_PANE, " ");
 	
-	protected Main main;
+	protected final Main main;
 	
 	public Menu(PlayerMenuUtility playerMenuUtility, Main main) {
 		this.playerMenuUtility = playerMenuUtility;
@@ -41,6 +41,10 @@ public abstract class Menu implements InventoryHolder {
 	
 	public Inventory getInventory() {
 		return inventory;
+	}
+	
+	public Main getMain() {
+		return main;
 	}
 	
 	public ItemStack createItem(Material material, String displayName, String... lore) {
