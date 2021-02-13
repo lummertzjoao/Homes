@@ -9,7 +9,7 @@ public class PlayerMenuUtility {
 	private final Player player;
 	
 	private Home selectedHome;
-
+	
 	public PlayerMenuUtility(Player player) {
 		this.player = player;
 	}
@@ -17,11 +17,11 @@ public class PlayerMenuUtility {
 	public Player getPlayer() {
 		return player;
 	}
-	
+
 	public Home getSelectedHome() {
 		return selectedHome;
 	}
-	
+
 	public void setSelectedHome(Home selectedHome) {
 		this.selectedHome = selectedHome;
 	}

@@ -33,27 +33,30 @@ public class HomeNamePrompt extends StringPrompt {
 	public Prompt acceptInput(ConversationContext context, String input) {
 		Player player = (Player) context.getForWhom();
 		PlayerMenuUtility playerMenuUtility = menu.getMain().getPlayerMenuUtility(player);
-		
+
 		if (input.equalsIgnoreCase("cancel")) {
 			player.sendRawMessage(CommonUtils.ERROR_MESSAGE_PREFIX + "Action canceled.");
 			return END_OF_CONVERSATION;
-		} 
-		
+		}
+
 		if (menu instanceof HomesMenu) {
 			createHome(input, player);
 		} else if (menu instanceof HomeEditMenu) {
+			String previousName = playerMenuUtility.getSelectedHome().getName();
 			playerMenuUtility.getSelectedHome().setName(input);
+			player.sendRawMessage(CommonUtils.INFO_MESSAGE_PREFIX + "Renamed home " + ChatColor.GOLD + previousName
+					+ ChatColor.GREEN + " to " + ChatColor.GOLD + input + ChatColor.GREEN + ".");
 		}
-		
+
 		new HomesMenu(playerMenuUtility, menu.getMain()).open();
 		return END_OF_CONVERSATION;
 	}
-	
+
 	private void createHome(String input, Player player) {
 		List<Home> playerHomes = menu.getMain().getPlayerHomesList(player);
 		if (playerHomes.stream().anyMatch(x -> x.getName().equalsIgnoreCase(input))) {
-			player.sendRawMessage(CommonUtils.ERROR_MESSAGE_PREFIX + "Home " + ChatColor.GOLD + input
-					+ ChatColor.RED + " already exists. Action canceled.");
+			player.sendRawMessage(CommonUtils.ERROR_MESSAGE_PREFIX + "Home " + ChatColor.GOLD + input + ChatColor.RED
+					+ " already exists. Action canceled.");
 		} else {
 			playerHomes.add(new Home(input, player));
 			player.sendRawMessage(CommonUtils.INFO_MESSAGE_PREFIX + "Home " + ChatColor.GOLD + input + ChatColor.GREEN

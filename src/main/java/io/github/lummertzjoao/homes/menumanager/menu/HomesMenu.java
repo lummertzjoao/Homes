@@ -34,21 +34,14 @@ public class HomesMenu extends PaginatedMenu {
 			conversation.begin();
 			return;
 		} else if (CommonUtils.icons.contains(type)) {
-			// Getting home by its name
-			Home clickedHome = null;
 			String name = ChatColor.stripColor(event.getCurrentItem().getItemMeta().getDisplayName());
-			for (Home home : playerHomes) {
-				if (home.getName().equals(name)) {
-					clickedHome = home;
-					break;
-				}
-			}
+			Home selectedHome = getHomeByName(name);
 			if (event.isLeftClick()) {
-				player.teleport(clickedHome.getLocation());
+				player.teleport(selectedHome.getLocation());
 				player.sendMessage(CommonUtils.INFO_MESSAGE_PREFIX + "You have been teleported to home "
-						+ ChatColor.GOLD + name + ChatColor.GREEN + ".");			
+						+ ChatColor.GOLD + name + ChatColor.GREEN + ".");
 			} else {
-				playerMenuUtility.setSelectedHome(clickedHome);
+				playerMenuUtility.setSelectedHome(selectedHome);
 				new HomeEditMenu(playerMenuUtility, main).open();
 			}
 			return;
@@ -92,13 +85,19 @@ public class HomesMenu extends PaginatedMenu {
 				Home home = playerHomes.get(index);
 				if (home != null) {
 					inventory.addItem(createItem(home.getIcon(), ChatColor.GREEN + "" + ChatColor.BOLD + home.getName(),
-							ChatColor.GRAY + "" + ChatColor.UNDERLINE + "Left click" + ChatColor.RESET + ChatColor.GRAY
-									+ " to teleport to this home",
-							ChatColor.GRAY + "" + ChatColor.UNDERLINE + "Right click" + ChatColor.RESET + ChatColor.GRAY
-									+ " to edit this home"));
+							ChatColor.WHITE + "Left click " + ChatColor.GRAY + "to teleport to this home",
+							ChatColor.WHITE + "Right click " + ChatColor.GRAY + "to edit this home"));
 				}
 			}
 		}
+	}
+
+	private Home getHomeByName(String name) {
+		for (Home home : main.getPlayerHomesList(playerMenuUtility.getPlayer())) {
+			if (home.getName().equals(name))
+				return home;
+		}
+		return null;
 	}
 
 	@Override
