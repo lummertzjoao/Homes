@@ -27,7 +27,7 @@ public class HomesMenu extends PaginatedMenu {
 		List<Home> playerHomes = main.getPlayerHomesList(player);
 		Material type = event.getCurrentItem().getType();
 
-		if (type == Material.BEACON) {
+		if (type == Material.FILLED_MAP) {
 			player.closeInventory();
 			Conversation conversation = main.getConversationFactory().withLocalEcho(false)
 					.withFirstPrompt(new HomeNamePrompt(this)).buildConversation(player);
@@ -73,7 +73,7 @@ public class HomesMenu extends PaginatedMenu {
 	@Override
 	public void setMenuItems() {
 		addMenuBorder();
-		inventory.setItem(4, createItem(Material.BEACON, ChatColor.GREEN + "Create a new home",
+		inventory.setItem(4, createItem(Material.FILLED_MAP, ChatColor.GREEN + "Create a new home",
 				ChatColor.GRAY + "Click here to set a new home in", ChatColor.GRAY + "your current location"));
 
 		List<Home> playerHomes = main.getPlayerHomesList(playerMenuUtility.getPlayer());

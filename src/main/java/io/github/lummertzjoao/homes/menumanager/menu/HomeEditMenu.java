@@ -31,7 +31,7 @@ public class HomeEditMenu extends Menu {
 			new IconColorSelectionMenu(playerMenuUtility, main).open();
 			break;
 		case BARRIER:
-			// delete home
+			new DeleteConfirmationMenu(playerMenuUtility, main).open();
 			break;
 		case ARROW:
 			new HomesMenu(playerMenuUtility, main).open();
