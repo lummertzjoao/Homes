@@ -43,9 +43,17 @@ public class HomeNamePrompt extends StringPrompt {
 			createHome(input, player);
 		} else if (menu instanceof HomeEditMenu) {
 			String previousName = playerMenuUtility.getSelectedHome().getName();
-			playerMenuUtility.getSelectedHome().setName(input);
-			player.sendRawMessage(CommonUtils.INFO_MESSAGE_PREFIX + "Renamed home " + ChatColor.GOLD + previousName
-					+ ChatColor.GREEN + " to " + ChatColor.GOLD + input + ChatColor.GREEN + ".");
+			// Checking if a home with the prompted name already exists
+			if (!menu.getMain().getPlayerHomesList(player).stream()
+					.anyMatch(x -> x.getName().equalsIgnoreCase(input))) {
+				playerMenuUtility.getSelectedHome().setName(input);
+				player.sendRawMessage(CommonUtils.INFO_MESSAGE_PREFIX + "Renamed home " + ChatColor.GOLD + previousName
+						+ ChatColor.GREEN + " to " + ChatColor.GOLD + input + ChatColor.GREEN + ".");
+			} else {
+				player.sendRawMessage(CommonUtils.ERROR_MESSAGE_PREFIX + "Home " + ChatColor.GOLD + input
+						+ ChatColor.RED + " already exists. Action canceled.");
+			}
+
 		}
 
 		new HomesMenu(playerMenuUtility, menu.getMain()).open();
