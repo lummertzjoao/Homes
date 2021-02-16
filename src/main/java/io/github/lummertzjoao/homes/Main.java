@@ -82,11 +82,9 @@ public class Main extends JavaPlugin {
 	
 	private void loadHomesFromConfig() {
 		for (String uuid : homesDataConfig.getConfigurationSection("homes").getKeys(false)) {
-			System.out.println("a");
 			Player player = Bukkit.getPlayer(UUID.fromString(uuid));
 			List<Home> playerHomes = getPlayerHomesList(player);
 			for (String name : homesDataConfig.getConfigurationSection("homes." + uuid).getKeys(false)) {
-				System.out.println("b");
 				Location location = homesDataConfig.getLocation("homes." + uuid + "." + name + ".location");
 				Material icon = Material.valueOf(homesDataConfig.getString("homes." + uuid + "." + name + ".icon"));
 				playerHomes.add(new Home(name, location, player, icon));
