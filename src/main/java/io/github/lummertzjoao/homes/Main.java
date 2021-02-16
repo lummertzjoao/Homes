@@ -1,10 +1,19 @@
 package io.github.lummertzjoao.homes;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.configuration.InvalidConfigurationException;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.conversations.ConversationFactory;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -16,6 +25,8 @@ import io.github.lummertzjoao.homes.menumanager.PlayerMenuUtility;
 
 public class Main extends JavaPlugin {
 
+	private File homesDataFile;
+	private FileConfiguration homesDataConfig;
 	private ConversationFactory conversationFactory;;
 	
 	private final Map<Player, List<Home>> homes = new HashMap<>();
@@ -23,6 +34,8 @@ public class Main extends JavaPlugin {
 
 	@Override
 	public void onEnable() {
+		setupHomesDataConfig();
+		loadHomesFromConfig();
 		conversationFactory = new ConversationFactory(this);
 		getCommand("homes").setExecutor(new HomesCommand(this));
 		getServer().getPluginManager().registerEvents(new MenuListener(), this);
@@ -31,7 +44,54 @@ public class Main extends JavaPlugin {
 
 	@Override
 	public void onDisable() {
+		saveHomesToConfig();
 		getLogger().info("The plugin has been disabled successfully!");
+	}
+	
+	private void setupHomesDataConfig() {
+		homesDataFile = new File(getDataFolder(), "data.yml");
+		if (!homesDataFile.exists()) {
+			homesDataFile.getParentFile().mkdirs();
+			saveResource("data.yml", false);
+		}
+		
+		homesDataConfig = new YamlConfiguration();
+		try {
+			homesDataConfig.load(homesDataFile);
+		} catch (IOException | InvalidConfigurationException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private void saveHomesToConfig() {
+		for (Player player : homes.keySet()) {
+			List<Home> playerHomes = getPlayerHomesList(player);
+			for (Home home : playerHomes) {
+				String uuid = player.getUniqueId().toString();
+				String homeName = home.getName();
+				homesDataConfig.set("homes." + uuid + "." + homeName + "." + "location", home.getLocation());
+				homesDataConfig.set("homes." + uuid + "." + homeName + "." + "icon", home.getIcon().toString());
+			}
+		}
+		try {
+			homesDataConfig.save(homesDataFile);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private void loadHomesFromConfig() {
+		for (String uuid : homesDataConfig.getConfigurationSection("homes").getKeys(false)) {
+			System.out.println("a");
+			Player player = Bukkit.getPlayer(UUID.fromString(uuid));
+			List<Home> playerHomes = getPlayerHomesList(player);
+			for (String name : homesDataConfig.getConfigurationSection("homes." + uuid).getKeys(false)) {
+				System.out.println("b");
+				Location location = homesDataConfig.getLocation("homes." + uuid + "." + name + ".location");
+				Material icon = Material.valueOf(homesDataConfig.getString("homes." + uuid + "." + name + ".icon"));
+				playerHomes.add(new Home(name, location, player, icon));
+			}
+		}
 	}
 	
 	public ConversationFactory getConversationFactory() {
