@@ -122,6 +122,10 @@ public class Main extends JavaPlugin {
 	public Map<Player, List<Home>> getHomes() {
 		return homes;
 	}
+	
+	public FileConfiguration getHomesDataConfig() {
+		return homesDataConfig;
+	}
 
 	public int getHomesLimit() {
 		return homesLimit;
