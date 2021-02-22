@@ -25,9 +25,10 @@ import io.github.lummertzjoao.homes.menumanager.PlayerMenuUtility;
 
 public class Main extends JavaPlugin {
 
+	private ConversationFactory conversationFactory;;
+
 	private File homesDataFile;
 	private FileConfiguration homesDataConfig;
-	private ConversationFactory conversationFactory;;
 	
 	private final Map<Player, List<Home>> homes = new HashMap<>();
 	private final Map<Player, PlayerMenuUtility> playerMenuUtilityMap = new HashMap<>();
@@ -69,8 +70,8 @@ public class Main extends JavaPlugin {
 			for (Home home : playerHomes) {
 				String uuid = player.getUniqueId().toString();
 				String homeName = home.getName();
-				homesDataConfig.set("homes." + uuid + "." + homeName + "." + "location", home.getLocation());
-				homesDataConfig.set("homes." + uuid + "." + homeName + "." + "icon", home.getIcon().toString());
+				homesDataConfig.set("homes." + uuid + "." + homeName + ".location", home.getLocation());
+				homesDataConfig.set("homes." + uuid + "." + homeName + ".icon", home.getIcon().toString());
 			}
 		}
 		try {
@@ -92,14 +93,6 @@ public class Main extends JavaPlugin {
 		}
 	}
 	
-	public ConversationFactory getConversationFactory() {
-		return conversationFactory;
-	}
-	
-	public Map<Player, List<Home>> getHomes() {
-		return homes;
-	}
-
 	public List<Home> getPlayerHomesList(Player player) {
 		List<Home> playerHomes = homes.get(player);
 		if (playerHomes == null) {
@@ -118,5 +111,13 @@ public class Main extends JavaPlugin {
 		} else {
 			return playerMenuUtilityMap.get(player);
 		}
+	}
+
+	public ConversationFactory getConversationFactory() {
+		return conversationFactory;
+	}
+	
+	public Map<Player, List<Home>> getHomes() {
+		return homes;
 	}
 }

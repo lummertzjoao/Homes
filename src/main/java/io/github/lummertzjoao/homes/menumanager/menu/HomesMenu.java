@@ -45,10 +45,12 @@ public class HomesMenu extends PaginatedMenu {
 				new HomeEditMenu(playerMenuUtility, main).open();
 			}
 			return;
-		} else if (type.equals(Material.DARK_OAK_DOOR)) {
+		} else if (type == Material.CLOCK) {
+			new SettingsMenu(playerMenuUtility, main).open();
+		} else if (type == Material.DARK_OAK_DOOR) {
 			player.closeInventory();
 			return;
-		} else if (type.equals(Material.DARK_OAK_BUTTON)) {
+		} else if (type == Material.DARK_OAK_BUTTON) {
 			if (ChatColor.stripColor(event.getCurrentItem().getItemMeta().getDisplayName())
 					.equalsIgnoreCase("Previous page")) {
 				if (page > 0) {
@@ -75,7 +77,9 @@ public class HomesMenu extends PaginatedMenu {
 		addMenuBorder();
 		inventory.setItem(4, createItem(Material.FILLED_MAP, ChatColor.GREEN + "Create a new home",
 				ChatColor.GRAY + "Click here to set a new home in", ChatColor.GRAY + "your current location"));
-
+		inventory.setItem(53, createItem(Material.CLOCK, ChatColor.GREEN + "Settings",
+				ChatColor.GRAY + "Click here to open the settings menu"));
+		
 		List<Home> playerHomes = main.getPlayerHomesList(playerMenuUtility.getPlayer());
 		if (!playerHomes.isEmpty()) {
 			for (int i = 0; i < maxItemsPerPage; i++) {
