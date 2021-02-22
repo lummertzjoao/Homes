@@ -39,21 +39,19 @@ public class HomeNamePrompt extends StringPrompt {
 			return END_OF_CONVERSATION;
 		}
 
+		// Checking if a home with the prompted name already exists
+		if (menu.getMain().getPlayerHomesList(player).stream().anyMatch(x -> x.getName().equalsIgnoreCase(input))) {
+			player.sendRawMessage(CommonUtils.ERROR_MESSAGE_PREFIX + "Home " + ChatColor.GOLD + input + ChatColor.RED
+					+ " already exists. Action canceled.");
+			return END_OF_CONVERSATION;
+		}
+
 		if (menu instanceof HomesMenu) {
 			createHome(input, player);
 		} else if (menu instanceof HomeEditMenu) {
-			String previousName = playerMenuUtility.getSelectedHome().getName();
-			// Checking if a home with the prompted name already exists
-			if (!menu.getMain().getPlayerHomesList(player).stream()
-					.anyMatch(x -> x.getName().equalsIgnoreCase(input))) {
-				playerMenuUtility.getSelectedHome().setName(input);
-				player.sendRawMessage(CommonUtils.INFO_MESSAGE_PREFIX + "Renamed home " + ChatColor.GOLD + previousName
-						+ ChatColor.GREEN + " to " + ChatColor.GOLD + input + ChatColor.GREEN + ".");
-			} else {
-				player.sendRawMessage(CommonUtils.ERROR_MESSAGE_PREFIX + "Home " + ChatColor.GOLD + input
-						+ ChatColor.RED + " already exists. Action canceled.");
-			}
-
+			Home home = CommonUtils.getHomeByName(playerMenuUtility.getSelectedHome().getName(), player,
+					menu.getMain());
+			renameHome(input, home, player);
 		}
 
 		new HomesMenu(playerMenuUtility, menu.getMain()).open();
@@ -70,5 +68,12 @@ public class HomeNamePrompt extends StringPrompt {
 			player.sendRawMessage(CommonUtils.INFO_MESSAGE_PREFIX + "Home " + ChatColor.GOLD + input + ChatColor.GREEN
 					+ " has been set.");
 		}
+	}
+
+	private void renameHome(String input, Home home, Player player) {
+		String previousName = menu.getMain().getPlayerMenuUtility(player).getSelectedHome().getName();
+		menu.getMain().getPlayerMenuUtility(player).getSelectedHome().setName(input);
+		player.sendRawMessage(CommonUtils.INFO_MESSAGE_PREFIX + "Renamed home " + ChatColor.GOLD + previousName
+				+ ChatColor.GREEN + " to " + ChatColor.GOLD + input + ChatColor.GREEN + ".");
 	}
 }

@@ -25,7 +25,7 @@ public class IconColorSelectionMenu extends Menu {
 		super(playerMenuUtility, main);
 
 		for (Material icon : CommonUtils.icons) {
-			iconColors.add(Material.valueOf(icon.toString().replace("BED", "DYE")));
+			iconColors.add(CommonUtils.getColorFromIcon(icon));
 		}
 	}
 	
@@ -34,11 +34,10 @@ public class IconColorSelectionMenu extends Menu {
 		Material type = event.getCurrentItem().getType();
 
 		if (iconColors.contains(type)) {
-			if (type == Material
-					.valueOf(playerMenuUtility.getSelectedHome().getIcon().toString().replace("BED", "DYE")))
+			if (type == CommonUtils.getColorFromIcon(playerMenuUtility.getSelectedHome().getIcon()))
 				return;
-			playerMenuUtility.getSelectedHome().setIcon(Material.valueOf(type.toString().replace("DYE", "BED")));
-			String name = type.toString().toLowerCase().replaceAll("_", " ").replace("dye", "");
+			playerMenuUtility.getSelectedHome().setIcon(CommonUtils.getIconFromColor(type));
+			String name = CommonUtils.getColorName(type);
 			playerMenuUtility.getPlayer().sendMessage(
 					CommonUtils.INFO_MESSAGE_PREFIX + "Selected " + ChatColor.GOLD + name + ChatColor.GREEN + "icon.");
 			new HomesMenu(playerMenuUtility, main).open();
@@ -53,10 +52,9 @@ public class IconColorSelectionMenu extends Menu {
 
 		for (Material material : iconColors) {
 			String name = ChatColor.GREEN
-					+ StringUtils.capitalize(material.toString().toLowerCase().replaceAll("_", " ").replace("dye", ""));
+					+ StringUtils.capitalize(CommonUtils.getColorName(material));
 
-			if (material != Material
-					.valueOf(playerMenuUtility.getSelectedHome().getIcon().toString().replace("BED", "DYE"))) {
+			if (material != CommonUtils.getColorFromIcon(playerMenuUtility.getSelectedHome().getIcon())) {
 				inventory.addItem(createItem(material, ChatColor.GREEN + StringUtils.capitalize(name),
 						ChatColor.GRAY + "Click here to select this color"));
 			} else {

@@ -40,7 +40,7 @@ public class HomesMenu extends PaginatedMenu {
 			return;
 		} else if (CommonUtils.icons.contains(type)) {
 			String name = ChatColor.stripColor(event.getCurrentItem().getItemMeta().getDisplayName());
-			Home selectedHome = getHomeByName(name);
+			Home selectedHome = CommonUtils.getHomeByName(name, player, main);
 			if (event.isLeftClick()) {
 				player.teleport(selectedHome.getLocation());
 				player.sendMessage(CommonUtils.INFO_MESSAGE_PREFIX + "You have been teleported to home "
@@ -102,14 +102,6 @@ public class HomesMenu extends PaginatedMenu {
 				}
 			}
 		}
-	}
-
-	private Home getHomeByName(String name) {
-		for (Home home : main.getPlayerHomesList(playerMenuUtility.getPlayer())) {
-			if (home.getName().equals(name))
-				return home;
-		}
-		return null;
 	}
 
 	@Override

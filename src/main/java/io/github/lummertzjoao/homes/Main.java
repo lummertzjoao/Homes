@@ -37,21 +37,23 @@ public class Main extends JavaPlugin {
 
 	@Override
 	public void onEnable() {
-		setupHomesDataConfig();
-		loadHomesFromConfig();
+		setupHomesDataFile();
+		loadHomes();
+		
 		conversationFactory = new ConversationFactory(this);
 		getCommand("homes").setExecutor(new HomesCommand(this));
 		getServer().getPluginManager().registerEvents(new MenuListener(), this);
+		
 		getLogger().info("The plugin has been enabled successfully!");
 	}
 
 	@Override
 	public void onDisable() {
-		saveHomesToConfig();
+		saveHomes();
 		getLogger().info("The plugin has been disabled successfully!");
 	}
 	
-	private void setupHomesDataConfig() {
+	private void setupHomesDataFile() {
 		homesDataFile = new File(getDataFolder(), "data.yml");
 		if (!homesDataFile.exists()) {
 			homesDataFile.getParentFile().mkdirs();
@@ -66,7 +68,7 @@ public class Main extends JavaPlugin {
 		}
 	}
 	
-	private void saveHomesToConfig() {
+	private void saveHomes() {
 		for (Player player : homes.keySet()) {
 			List<Home> playerHomes = getPlayerHomesList(player);
 			for (Home home : playerHomes) {
@@ -83,7 +85,7 @@ public class Main extends JavaPlugin {
 		}
 	}
 	
-	private void loadHomesFromConfig() {
+	private void loadHomes() {
 		for (String uuid : homesDataConfig.getConfigurationSection("homes").getKeys(false)) {
 			Player player = Bukkit.getPlayer(UUID.fromString(uuid));
 			List<Home> playerHomes = getPlayerHomesList(player);
