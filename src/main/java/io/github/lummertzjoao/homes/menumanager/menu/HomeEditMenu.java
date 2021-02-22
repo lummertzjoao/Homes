@@ -23,8 +23,10 @@ public class HomeEditMenu extends Menu {
 		switch (event.getCurrentItem().getType()) {
 		case PAPER:
 			player.closeInventory();
-			Conversation conversation = main.getConversationFactory().withLocalEcho(false)
-					.withFirstPrompt(new HomeNamePrompt(this)).buildConversation(player);
+			Conversation conversation = main.getConversationFactory()
+					.withLocalEcho(false)
+					.withFirstPrompt(new HomeNamePrompt(this))
+					.buildConversation(player);
 			conversation.begin();
 			break;
 		case CLOCK:

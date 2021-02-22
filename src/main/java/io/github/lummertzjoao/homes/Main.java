@@ -25,6 +25,8 @@ import io.github.lummertzjoao.homes.menumanager.PlayerMenuUtility;
 
 public class Main extends JavaPlugin {
 
+	private int homesLimit;
+	
 	private ConversationFactory conversationFactory;;
 
 	private File homesDataFile;
@@ -119,5 +121,13 @@ public class Main extends JavaPlugin {
 	
 	public Map<Player, List<Home>> getHomes() {
 		return homes;
+	}
+
+	public int getHomesLimit() {
+		return homesLimit;
+	}
+
+	public void setHomesLimit(int homesLimit) {
+		this.homesLimit = homesLimit;
 	}
 }

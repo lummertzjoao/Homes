@@ -2,11 +2,14 @@ package io.github.lummertzjoao.homes.menumanager.menu;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.conversations.Conversation;
+import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 
 import io.github.lummertzjoao.homes.Main;
 import io.github.lummertzjoao.homes.menumanager.Menu;
 import io.github.lummertzjoao.homes.menumanager.PlayerMenuUtility;
+import io.github.lummertzjoao.homes.prompt.HomesLimitPrompt;
 
 public class SettingsMenu extends Menu {
 
@@ -16,9 +19,15 @@ public class SettingsMenu extends Menu {
 
 	@Override
 	public void onInventoryClick(InventoryClickEvent event) {
+		Player player = (Player) event.getWhoClicked();
 		switch (event.getCurrentItem().getType()) {
 		case OAK_DOOR:
-			// create conversation
+			player.closeInventory();
+			Conversation conversation = main.getConversationFactory()
+					.withLocalEcho(false)
+					.withFirstPrompt(new HomesLimitPrompt(main))
+					.buildConversation(player);
+			conversation.begin();
 			break;
 		case ITEM_FRAME:
 			// open size selection menu
@@ -40,7 +49,7 @@ public class SettingsMenu extends Menu {
 		inventory.setItem(22, createItem(Material.ARROW, ChatColor.RED + "Back",
 				ChatColor.GRAY + "Click here to go back to the homes menu"));
 	}
-	
+
 	@Override
 	public String getMenuName() {
 		return "Settings";
