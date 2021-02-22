@@ -18,7 +18,8 @@ public class HomesLimitPrompt extends NumericPrompt {
 
 	@Override
 	public String getPromptText(ConversationContext arg0) {
-		return "Enter the desired number for the homes limit:";
+		return ChatColor.YELLOW + "Enter the desired number for the homes limit or '" + ChatColor.GOLD + "cancel"
+				+ ChatColor.YELLOW + "' to cancel this action";
 	}
 
 	@Override

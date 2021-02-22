@@ -29,9 +29,14 @@ public class HomesMenu extends PaginatedMenu {
 
 		if (type == Material.FILLED_MAP) {
 			player.closeInventory();
-			Conversation conversation = main.getConversationFactory().withLocalEcho(false)
-					.withFirstPrompt(new HomeNamePrompt(this)).buildConversation(player);
-			conversation.begin();
+			if (playerHomes.size() < main.getHomesLimit()) {
+				Conversation conversation = main.getConversationFactory().withLocalEcho(false)
+						.withFirstPrompt(new HomeNamePrompt(this)).buildConversation(player);
+				conversation.begin();
+			} else {
+				player.sendMessage(
+						CommonUtils.ERROR_MESSAGE_PREFIX + "You have already reached the maximum number of homes.");
+			}
 			return;
 		} else if (CommonUtils.icons.contains(type)) {
 			String name = ChatColor.stripColor(event.getCurrentItem().getItemMeta().getDisplayName());
@@ -77,9 +82,12 @@ public class HomesMenu extends PaginatedMenu {
 		addMenuBorder();
 		inventory.setItem(4, createItem(Material.FILLED_MAP, ChatColor.GREEN + "Create a new home",
 				ChatColor.GRAY + "Click here to set a new home in", ChatColor.GRAY + "your current location"));
-		inventory.setItem(53, createItem(Material.CLOCK, ChatColor.GREEN + "Settings",
-				ChatColor.GRAY + "Click here to open the settings menu"));
 		
+		if (playerMenuUtility.getPlayer().hasPermission("homes.admin")) {
+			inventory.setItem(53, createItem(Material.CLOCK, ChatColor.GREEN + "Settings",
+					ChatColor.GRAY + "Click here to open the settings menu"));
+		}
+
 		List<Home> playerHomes = main.getPlayerHomesList(playerMenuUtility.getPlayer());
 		if (!playerHomes.isEmpty()) {
 			for (int i = 0; i < maxItemsPerPage; i++) {
