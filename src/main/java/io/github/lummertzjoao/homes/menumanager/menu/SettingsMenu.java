@@ -23,10 +23,8 @@ public class SettingsMenu extends Menu {
 		switch (event.getCurrentItem().getType()) {
 		case OAK_DOOR:
 			player.closeInventory();
-			Conversation conversation = main.getConversationFactory()
-					.withLocalEcho(false)
-					.withFirstPrompt(new HomesLimitPrompt(main))
-					.buildConversation(player);
+			Conversation conversation = main.getConversationFactory().withLocalEcho(false)
+					.withFirstPrompt(new HomesLimitPrompt(main)).buildConversation(player);
 			conversation.begin();
 			break;
 		case ITEM_FRAME:
@@ -42,8 +40,10 @@ public class SettingsMenu extends Menu {
 
 	@Override
 	public void setMenuItems() {
-		inventory.setItem(11, createItem(Material.OAK_DOOR, ChatColor.GREEN + "Homes limit",
-				ChatColor.GRAY + "Click here to change the homes limit"));
+		inventory.setItem(11,
+				createItem(Material.OAK_DOOR, ChatColor.GREEN + "Homes limit",
+						ChatColor.GRAY + "Click here to change the homes limit",
+						ChatColor.GRAY + "Current: " + ChatColor.WHITE + main.getHomesLimit()));
 		inventory.setItem(15, createItem(Material.ITEM_FRAME, ChatColor.GREEN + "Homes menu size",
 				ChatColor.GRAY + "Click here to change the homes menu size"));
 		inventory.setItem(22, createItem(Material.ARROW, ChatColor.RED + "Back",

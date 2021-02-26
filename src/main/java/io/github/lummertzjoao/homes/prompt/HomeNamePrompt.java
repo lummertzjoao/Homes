@@ -40,7 +40,7 @@ public class HomeNamePrompt extends StringPrompt {
 		}
 
 		// Checking if a home with the prompted name already exists
-		if (menu.getMain().getPlayerHomesList(player).stream().anyMatch(x -> x.getName().equalsIgnoreCase(input))) {
+		if (menu.getMain().getPlayerHomes(player).stream().anyMatch(x -> x.getName().equalsIgnoreCase(input))) {
 			player.sendRawMessage(CommonUtils.ERROR_MESSAGE_PREFIX + "Home " + ChatColor.GOLD + input + ChatColor.RED
 					+ " already exists. Action canceled.");
 			return END_OF_CONVERSATION;
@@ -51,7 +51,7 @@ public class HomeNamePrompt extends StringPrompt {
 		} else if (menu instanceof HomeEditMenu) {
 			Home home = CommonUtils.getHomeByName(playerMenuUtility.getSelectedHome().getName(), player,
 					menu.getMain());
-			renameHome(input, home, player);
+			renameHome(home, input, player);
 		}
 
 		new HomesMenu(playerMenuUtility, menu.getMain()).open();
@@ -59,7 +59,7 @@ public class HomeNamePrompt extends StringPrompt {
 	}
 
 	private void createHome(String input, Player player) {
-		List<Home> playerHomes = menu.getMain().getPlayerHomesList(player);
+		List<Home> playerHomes = menu.getMain().getPlayerHomes(player);
 		if (playerHomes.stream().anyMatch(x -> x.getName().equalsIgnoreCase(input))) {
 			player.sendRawMessage(CommonUtils.ERROR_MESSAGE_PREFIX + "Home " + ChatColor.GOLD + input + ChatColor.RED
 					+ " already exists. Action canceled.");
@@ -70,9 +70,9 @@ public class HomeNamePrompt extends StringPrompt {
 		}
 	}
 
-	private void renameHome(String input, Home home, Player player) {
-		String previousName = menu.getMain().getPlayerMenuUtility(player).getSelectedHome().getName();
-		menu.getMain().getPlayerMenuUtility(player).getSelectedHome().setName(input);
+	private void renameHome(Home home, String input, Player player) {
+		String previousName = home.getName();
+		home.setName(input);
 		player.sendRawMessage(CommonUtils.INFO_MESSAGE_PREFIX + "Renamed home " + ChatColor.GOLD + previousName
 				+ ChatColor.GREEN + " to " + ChatColor.GOLD + input + ChatColor.GREEN + ".");
 	}

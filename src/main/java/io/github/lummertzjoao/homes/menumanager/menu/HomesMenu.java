@@ -24,7 +24,7 @@ public class HomesMenu extends PaginatedMenu {
 	@Override
 	public void onInventoryClick(InventoryClickEvent event) {
 		Player player = (Player) event.getWhoClicked();
-		List<Home> playerHomes = main.getPlayerHomesList(player);
+		List<Home> playerHomes = main.getPlayerHomes(player);
 		Material type = event.getCurrentItem().getType();
 
 		if (type == Material.FILLED_MAP) {
@@ -88,7 +88,7 @@ public class HomesMenu extends PaginatedMenu {
 					ChatColor.GRAY + "Click here to open the settings menu"));
 		}
 
-		List<Home> playerHomes = main.getPlayerHomesList(playerMenuUtility.getPlayer());
+		List<Home> playerHomes = main.getPlayerHomes(playerMenuUtility.getPlayer());
 		if (!playerHomes.isEmpty()) {
 			for (int i = 0; i < maxItemsPerPage; i++) {
 				index = maxItemsPerPage * page + i;

@@ -27,7 +27,7 @@ public class Main extends JavaPlugin {
 
 	private int homesLimit;
 	
-	private ConversationFactory conversationFactory;;
+	private ConversationFactory conversationFactory;
 
 	private File homesDataFile;
 	private FileConfiguration homesDataConfig;
@@ -37,6 +37,7 @@ public class Main extends JavaPlugin {
 
 	@Override
 	public void onEnable() {
+		getLogger().info("Loading homes from 'data.yml' file...");
 		setupHomesDataFile();
 		loadHomes();
 		
@@ -49,6 +50,7 @@ public class Main extends JavaPlugin {
 
 	@Override
 	public void onDisable() {
+		getLogger().info("Saving homes to 'data.yml' file...");
 		saveHomes();
 		getLogger().info("The plugin has been disabled successfully!");
 	}
@@ -70,7 +72,7 @@ public class Main extends JavaPlugin {
 	
 	private void saveHomes() {
 		for (Player player : homes.keySet()) {
-			List<Home> playerHomes = getPlayerHomesList(player);
+			List<Home> playerHomes = getPlayerHomes(player);
 			for (Home home : playerHomes) {
 				String uuid = player.getUniqueId().toString();
 				String homeName = home.getName();
@@ -88,7 +90,7 @@ public class Main extends JavaPlugin {
 	private void loadHomes() {
 		for (String uuid : homesDataConfig.getConfigurationSection("homes").getKeys(false)) {
 			Player player = Bukkit.getPlayer(UUID.fromString(uuid));
-			List<Home> playerHomes = getPlayerHomesList(player);
+			List<Home> playerHomes = getPlayerHomes(player);
 			for (String name : homesDataConfig.getConfigurationSection("homes." + uuid).getKeys(false)) {
 				Location location = homesDataConfig.getLocation("homes." + uuid + "." + name + ".location");
 				Material icon = Material.valueOf(homesDataConfig.getString("homes." + uuid + "." + name + ".icon"));
@@ -97,7 +99,7 @@ public class Main extends JavaPlugin {
 		}
 	}
 	
-	public List<Home> getPlayerHomesList(Player player) {
+	public List<Home> getPlayerHomes(Player player) {
 		List<Home> playerHomes = homes.get(player);
 		if (playerHomes == null) {
 			playerHomes = new ArrayList<>();

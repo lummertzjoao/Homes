@@ -26,7 +26,7 @@ public class DeleteConfirmationMenu extends Menu {
 			new HomeEditMenu(playerMenuUtility, main).open();
 			break;
 		case LIME_WOOL:
-			main.getPlayerHomesList(player).remove(selectedHome);
+			main.getPlayerHomes(player).remove(selectedHome);
 			main.getHomesDataConfig().set("homes." + player.getUniqueId() + "." + selectedHome.getName(), null);
 			player.sendMessage(CommonUtils.INFO_MESSAGE_PREFIX + "Deleted home " + ChatColor.GOLD
 					+ playerMenuUtility.getSelectedHome().getName() + ChatColor.GREEN + ".");

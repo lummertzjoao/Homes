@@ -36,7 +36,7 @@ public class CommonUtils {
 	}
 	
 	public static Home getHomeByName(String name, Player player, Main main) {
-		for (Home home : main.getPlayerHomesList(player)) {
+		for (Home home : main.getPlayerHomes(player)) {
 			if (home.getName().equals(name))
 				return home;
 		}
