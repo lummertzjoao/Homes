@@ -50,8 +50,8 @@ public class HomesMenu extends PaginatedMenu {
 				new HomeEditMenu(playerMenuUtility, main).open();
 			}
 			return;
-		} else if (type == Material.CLOCK) {
-			new SettingsMenu(playerMenuUtility, main).open();
+		} else if (type == Material.NETHER_STAR) {
+			new AdminPanelMenu(playerMenuUtility, main).open();
 		} else if (type == Material.DARK_OAK_DOOR) {
 			player.closeInventory();
 			return;
@@ -84,8 +84,8 @@ public class HomesMenu extends PaginatedMenu {
 				ChatColor.GRAY + "Click here to set a new home in", ChatColor.GRAY + "your current location"));
 		
 		if (playerMenuUtility.getPlayer().hasPermission("homes.admin")) {
-			inventory.setItem(53, createItem(Material.CLOCK, ChatColor.GREEN + "Settings",
-					ChatColor.GRAY + "Click here to open the settings menu"));
+			inventory.setItem(53, createItem(Material.NETHER_STAR, ChatColor.GREEN + "Admin panel",
+					ChatColor.GRAY + "Click here to open the admin panel"));
 		}
 
 		List<Home> playerHomes = main.getPlayerHomes(playerMenuUtility.getPlayer());

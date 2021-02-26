@@ -31,7 +31,7 @@ public class SettingsMenu extends Menu {
 			// open size selection menu
 			break;
 		case ARROW:
-			new HomesMenu(playerMenuUtility, main).open();
+			new AdminPanelMenu(playerMenuUtility, main).open();
 			break;
 		default:
 			break;
@@ -47,7 +47,7 @@ public class SettingsMenu extends Menu {
 		inventory.setItem(15, createItem(Material.ITEM_FRAME, ChatColor.GREEN + "Homes menu size",
 				ChatColor.GRAY + "Click here to change the homes menu size"));
 		inventory.setItem(22, createItem(Material.ARROW, ChatColor.RED + "Back",
-				ChatColor.GRAY + "Click here to go back to the homes menu"));
+				ChatColor.GRAY + "Click here to go back to the admin panel"));
 	}
 
 	@Override
