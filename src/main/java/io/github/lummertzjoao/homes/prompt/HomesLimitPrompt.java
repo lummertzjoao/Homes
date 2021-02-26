@@ -17,14 +17,24 @@ public class HomesLimitPrompt extends NumericPrompt {
 	}
 
 	@Override
-	public String getPromptText(ConversationContext arg0) {
-		return ChatColor.YELLOW + "Enter the desired number for the homes limit or '" + ChatColor.GOLD + "cancel"
+	public String getPromptText(ConversationContext context) {
+		return ChatColor.YELLOW + "Enter the desired number for the homes limit or '" + ChatColor.GOLD + "0"
 				+ ChatColor.YELLOW + "' to cancel this action";
 	}
 
 	@Override
 	protected Prompt acceptValidatedInput(ConversationContext context, Number input) {
 		int value = input.intValue();
+		if (value == 0) {
+			context.getForWhom().sendRawMessage(CommonUtils.INFO_MESSAGE_PREFIX + "Action canceled.");
+			return END_OF_CONVERSATION;
+		}
+
+		if (value < 0) {
+			context.getForWhom().sendRawMessage(CommonUtils.ERROR_MESSAGE_PREFIX
+					+ "The homes limit must be greater than " + ChatColor.GOLD + "0" + ChatColor.RED + ".");
+			return this;
+		}
 		main.setHomesLimit(value);
 		context.getForWhom().sendRawMessage(CommonUtils.INFO_MESSAGE_PREFIX + "Changed homes limit to " + ChatColor.GOLD
 				+ value + ChatColor.GREEN + ".");
