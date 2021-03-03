@@ -15,6 +15,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import io.github.lummertzjoao.homes.Main;
 import io.github.lummertzjoao.homes.menumanager.Menu;
 import io.github.lummertzjoao.homes.menumanager.PlayerMenuUtility;
+import io.github.lummertzjoao.homes.model.entity.Home;
 import io.github.lummertzjoao.homes.util.CommonUtils;
 
 public class IconColorSelectionMenu extends Menu {
@@ -36,7 +37,9 @@ public class IconColorSelectionMenu extends Menu {
 		if (iconColors.contains(type)) {
 			if (type == CommonUtils.getColorFromIcon(playerMenuUtility.getSelectedHome().getIcon()))
 				return;
-			playerMenuUtility.getSelectedHome().setIcon(CommonUtils.getIconFromColor(type));
+			Home home = playerMenuUtility.getSelectedHome();
+			home.setIcon(CommonUtils.getIconFromColor(type));
+			main.getHomeDao().update(home);
 			String name = CommonUtils.getColorName(type);
 			playerMenuUtility.getPlayer().sendMessage(
 					CommonUtils.INFO_MESSAGE_PREFIX + "Selected " + ChatColor.GOLD + name + ChatColor.GREEN + "icon.");

@@ -2,7 +2,7 @@ package io.github.lummertzjoao.homes.menumanager;
 
 import org.bukkit.entity.Player;
 
-import io.github.lummertzjoao.homes.domain.Home;
+import io.github.lummertzjoao.homes.model.entity.Home;
 
 public class PlayerMenuUtility {
 	

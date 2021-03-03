@@ -2,34 +2,31 @@ package io.github.lummertzjoao.homes.menumanager.menu;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 
 import io.github.lummertzjoao.homes.Main;
-import io.github.lummertzjoao.homes.domain.Home;
 import io.github.lummertzjoao.homes.menumanager.Menu;
 import io.github.lummertzjoao.homes.menumanager.PlayerMenuUtility;
+import io.github.lummertzjoao.homes.model.entity.Home;
 import io.github.lummertzjoao.homes.util.CommonUtils;
 
-public class DeleteConfirmationMenu extends Menu {
+public class DeletionConfirmationMenu extends Menu {
 
-	public DeleteConfirmationMenu(PlayerMenuUtility playerMenuUtility, Main main) {
+	public DeletionConfirmationMenu(PlayerMenuUtility playerMenuUtility, Main main) {
 		super(playerMenuUtility, main);
 	}
 
 	@Override
 	public void onInventoryClick(InventoryClickEvent event) {
-		Player player = (Player) event.getWhoClicked();
 		Home selectedHome = playerMenuUtility.getSelectedHome();
 		switch (event.getCurrentItem().getType()) {
 		case RED_WOOL:
 			new HomeEditMenu(playerMenuUtility, main).open();
 			break;
 		case LIME_WOOL:
-			main.getPlayerHomes(player).remove(selectedHome);
-			main.getHomesDataConfig().set("homes." + player.getUniqueId() + "." + selectedHome.getName(), null);
-			player.sendMessage(CommonUtils.INFO_MESSAGE_PREFIX + "Deleted home " + ChatColor.GOLD
-					+ playerMenuUtility.getSelectedHome().getName() + ChatColor.GREEN + ".");
+			main.getHomeDao().deleteById(selectedHome.getId());
+			event.getWhoClicked().sendMessage(CommonUtils.INFO_MESSAGE_PREFIX + "Deleted home " + ChatColor.GOLD
+					+ selectedHome.getName() + ChatColor.GREEN + " successfully.");
 			new HomesMenu(playerMenuUtility, main).open();
 			break;
 		default:

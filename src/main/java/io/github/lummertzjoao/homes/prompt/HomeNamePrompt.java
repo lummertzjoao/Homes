@@ -1,18 +1,16 @@
 package io.github.lummertzjoao.homes.prompt;
 
-import java.util.List;
-
 import org.bukkit.ChatColor;
 import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.Prompt;
 import org.bukkit.conversations.StringPrompt;
 import org.bukkit.entity.Player;
 
-import io.github.lummertzjoao.homes.domain.Home;
 import io.github.lummertzjoao.homes.menumanager.Menu;
 import io.github.lummertzjoao.homes.menumanager.PlayerMenuUtility;
 import io.github.lummertzjoao.homes.menumanager.menu.HomeEditMenu;
 import io.github.lummertzjoao.homes.menumanager.menu.HomesMenu;
+import io.github.lummertzjoao.homes.model.entity.Home;
 import io.github.lummertzjoao.homes.util.CommonUtils;
 
 public class HomeNamePrompt extends StringPrompt {
@@ -40,7 +38,8 @@ public class HomeNamePrompt extends StringPrompt {
 		}
 
 		// Checking if a home with the prompted name already exists
-		if (menu.getMain().getPlayerHomes(player).stream().anyMatch(x -> x.getName().equalsIgnoreCase(input))) {
+		if (menu.getMain().getHomeDao().findPlayerHomes(player.getName()).stream()
+				.anyMatch(x -> x.getName().equalsIgnoreCase(input))) {
 			player.sendRawMessage(CommonUtils.ERROR_MESSAGE_PREFIX + "Home " + ChatColor.GOLD + input + ChatColor.RED
 					+ " already exists. Action canceled.");
 			return END_OF_CONVERSATION;
@@ -49,9 +48,7 @@ public class HomeNamePrompt extends StringPrompt {
 		if (menu instanceof HomesMenu) {
 			createHome(input, player);
 		} else if (menu instanceof HomeEditMenu) {
-			Home home = CommonUtils.getHomeByName(playerMenuUtility.getSelectedHome().getName(), player,
-					menu.getMain());
-			renameHome(home, input, player);
+			renameHome(playerMenuUtility.getSelectedHome(), input, player);
 		}
 
 		new HomesMenu(playerMenuUtility, menu.getMain()).open();
@@ -59,20 +56,15 @@ public class HomeNamePrompt extends StringPrompt {
 	}
 
 	private void createHome(String input, Player player) {
-		List<Home> playerHomes = menu.getMain().getPlayerHomes(player);
-		if (playerHomes.stream().anyMatch(x -> x.getName().equalsIgnoreCase(input))) {
-			player.sendRawMessage(CommonUtils.ERROR_MESSAGE_PREFIX + "Home " + ChatColor.GOLD + input + ChatColor.RED
-					+ " already exists. Action canceled.");
-		} else {
-			playerHomes.add(new Home(input, player));
-			player.sendRawMessage(CommonUtils.INFO_MESSAGE_PREFIX + "Home " + ChatColor.GOLD + input + ChatColor.GREEN
-					+ " has been set.");
-		}
+		menu.getMain().getHomeDao().insert(new Home(input, player.getName()));
+		player.sendRawMessage(CommonUtils.INFO_MESSAGE_PREFIX + "Home " + ChatColor.GOLD + input + ChatColor.GREEN
+				+ " has been set.");
 	}
 
 	private void renameHome(Home home, String input, Player player) {
 		String previousName = home.getName();
 		home.setName(input);
+		menu.getMain().getHomeDao().update(home);
 		player.sendRawMessage(CommonUtils.INFO_MESSAGE_PREFIX + "Renamed home " + ChatColor.GOLD + previousName
 				+ ChatColor.GREEN + " to " + ChatColor.GOLD + input + ChatColor.GREEN + ".");
 	}
