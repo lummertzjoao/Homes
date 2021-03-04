@@ -38,7 +38,7 @@ public class HomeNamePrompt extends StringPrompt {
 		}
 
 		// Checking if a home with the prompted name already exists
-		if (menu.getMain().getHomeDao().findPlayerHomes(player.getName()).stream()
+		if (menu.getMain().getHomeDao().getPlayerHomes(player.getUniqueId()).stream()
 				.anyMatch(x -> x.getName().equalsIgnoreCase(input))) {
 			player.sendRawMessage(CommonUtils.ERROR_MESSAGE_PREFIX + "Home " + ChatColor.GOLD + input + ChatColor.RED
 					+ " already exists. Action canceled.");
@@ -56,7 +56,7 @@ public class HomeNamePrompt extends StringPrompt {
 	}
 
 	private void createHome(String input, Player player) {
-		menu.getMain().getHomeDao().insert(new Home(input, player.getName()));
+		menu.getMain().getHomeDao().insert(new Home(input, player.getUniqueId()));
 		player.sendRawMessage(CommonUtils.INFO_MESSAGE_PREFIX + "Home " + ChatColor.GOLD + input + ChatColor.GREEN
 				+ " has been set.");
 	}

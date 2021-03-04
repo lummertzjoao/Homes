@@ -30,7 +30,7 @@ public class HomesMenu extends PaginatedMenu {
 	@Override
 	public void onInventoryClick(InventoryClickEvent event) {
 		Player player = (Player) event.getWhoClicked();
-		List<Home> playerHomes = main.getHomeDao().findPlayerHomes(player.getName());
+		List<Home> playerHomes = main.getHomeDao().getPlayerHomes(player.getUniqueId());
 		Material type = event.getCurrentItem().getType();
 
 		if (type == Material.FILLED_MAP) {
@@ -101,7 +101,7 @@ public class HomesMenu extends PaginatedMenu {
 					ChatColor.GRAY + "Click here to open the admin panel"));
 		}
 
-		List<Home> playerHomes = main.getHomeDao().findPlayerHomes(playerMenuUtility.getPlayer().getName());
+		List<Home> playerHomes = main.getHomeDao().getPlayerHomes(playerMenuUtility.getPlayer().getUniqueId());
 		if (!playerHomes.isEmpty()) {
 			for (int i = 0; i < maxItemsPerPage; i++) {
 				index = maxItemsPerPage * page + i;

@@ -1,5 +1,6 @@
 package io.github.lummertzjoao.homes.model.entity;
 
+import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.bukkit.Bukkit;
@@ -12,22 +13,22 @@ public class Home {
 	
 	private final int id;
 	private String name;
-	private final String ownerName;
+	private final UUID ownerUniqueId;
 	private final Location location;
 	private Material icon;
 
-	public Home(String name, String playerName) {
+	public Home(String name, UUID playerUniqueId) {
 		this.id = ID_GENERATOR.getAndIncrement();
 		this.name = name;
-		this.location = Bukkit.getPlayer(playerName).getLocation();
-		this.ownerName = playerName;
+		this.location = Bukkit.getPlayer(playerUniqueId).getLocation();
+		this.ownerUniqueId = playerUniqueId;
 		this.icon = Material.RED_BED;
 	}
 
-	public Home(int id, String name, String playerName, Location location, Material icon) {
+	public Home(int id, String name, UUID playerUniqueId, Location location, Material icon) {
 		this.id = id;
 		this.name = name;
-		this.ownerName = playerName;
+		this.ownerUniqueId = playerUniqueId;
 		this.location = location;
 		this.icon = icon;
 	}
@@ -44,8 +45,8 @@ public class Home {
 		this.name = name;
 	}
 
-	public String getOwnerName() {
-		return ownerName;
+	public UUID getOwnerUniqueId() {
+		return ownerUniqueId;
 	}
 	
 	public Location getLocation() {
@@ -80,10 +81,5 @@ public class Home {
 		if (id != other.id)
 			return false;
 		return true;
-	}
-
-	@Override
-	public String toString() {
-		return "Home [name=" + name + ", location=" + location + ", owner=" + ownerName + ", icon=" + icon + "]";
 	}
 }
