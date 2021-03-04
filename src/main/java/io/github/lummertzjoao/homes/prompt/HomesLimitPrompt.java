@@ -29,7 +29,6 @@ public class HomesLimitPrompt extends NumericPrompt {
 			context.getForWhom().sendRawMessage(CommonUtils.INFO_MESSAGE_PREFIX + "Action canceled.");
 			return END_OF_CONVERSATION;
 		}
-
 		if (value < 0) {
 			context.getForWhom().sendRawMessage(CommonUtils.ERROR_MESSAGE_PREFIX
 					+ "The homes limit must be greater than " + ChatColor.GOLD + "0" + ChatColor.RED + ".");

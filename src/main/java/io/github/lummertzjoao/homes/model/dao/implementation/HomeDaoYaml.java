@@ -64,7 +64,7 @@ public class HomeDaoYaml implements HomeDao {
 	@Override
 	public void update(Home home) {
 		String path = "homes." + home.getId();
-		// These are the only attributes that are mutable in a home
+		// These are the only 2 attributes that are mutable in a home
 		homesDataConfig.set(path + ".homeName", home.getName());
 		homesDataConfig.set(path + ".icon", home.getIcon().toString());
 		this.save();

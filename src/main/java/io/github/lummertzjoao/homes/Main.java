@@ -15,8 +15,6 @@ import io.github.lummertzjoao.homes.model.dao.HomeDao;
 
 public class Main extends JavaPlugin {
 
-	private int homesLimit;
-	
 	private HomeDao homeDao;
 	
 	private ConversationFactory conversationFactory;
@@ -27,6 +25,7 @@ public class Main extends JavaPlugin {
 	public void onEnable() {
 		homeDao = DaoFactory.createHomeDao(this);
 		homeDao.setup();
+		saveDefaultConfig();
 		
 		conversationFactory = new ConversationFactory(this);
 		getCommand("homes").setExecutor(new HomesCommand(this));
@@ -38,6 +37,8 @@ public class Main extends JavaPlugin {
 	@Override
 	public void onDisable() {
 		homeDao.save();
+		saveConfig();
+		
 		getLogger().info("The plugin has been disabled successfully!");
 	}
 	
@@ -61,10 +62,11 @@ public class Main extends JavaPlugin {
 	}
 	
 	public int getHomesLimit() {
-		return homesLimit;
+		return getConfig().getInt("homesLimit");
 	}
-
-	public void setHomesLimit(int homesLimit) {
-		this.homesLimit = homesLimit;
+	
+	public void setHomesLimit(int limit) {
+		getConfig().set("homesLimit", limit);
+		saveConfig();
 	}
 }
