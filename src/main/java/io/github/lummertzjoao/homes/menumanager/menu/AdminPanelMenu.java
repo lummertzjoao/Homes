@@ -18,7 +18,7 @@ public class AdminPanelMenu extends Menu {
 	public void onInventoryClick(InventoryClickEvent event) {
 		switch (event.getCurrentItem().getType()) {
 		case PLAYER_HEAD:
-			// open PlayerSelectionMenu
+			new PlayerSelectionMenu(playerMenuUtility, main).open();
 			break;
 		case CLOCK:
 			new SettingsMenu(playerMenuUtility, main).open();

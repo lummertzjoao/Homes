@@ -2,15 +2,19 @@ package io.github.lummertzjoao.homes.menumanager.menu;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.conversations.Conversation;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
@@ -23,8 +27,16 @@ import io.github.lummertzjoao.homes.util.CommonUtils;
 
 public class HomesMenu extends PaginatedMenu {
 
+	private final UUID playerUniqueId;
+	
 	public HomesMenu(PlayerMenuUtility playerMenuUtility, Main main) {
 		super(playerMenuUtility, main);
+		playerUniqueId = null;
+	}
+	
+	public HomesMenu(PlayerMenuUtility playerMenuUtility, Main main, UUID player) {
+		super(playerMenuUtility, main);
+		this.playerUniqueId = player;
 	}
 
 	@Override
@@ -41,7 +53,7 @@ public class HomesMenu extends PaginatedMenu {
 				conversation.begin();
 			} else {
 				player.sendMessage(
-						CommonUtils.ERROR_MESSAGE_PREFIX + "You have already reached the maximum number of homes.");
+						CommonUtils.ERROR_MESSAGE_PREFIX + "You have reached the maximum number of homes.");
 			}
 			return;
 		} else if (CommonUtils.icons.contains(type)) {
@@ -68,7 +80,10 @@ public class HomesMenu extends PaginatedMenu {
 		} else if (type == Material.DARK_OAK_DOOR) {
 			player.closeInventory();
 			return;
-		} else if (type == Material.DARK_OAK_BUTTON) {
+		} else if (type == Material.ARROW) {
+			new PlayerSelectionMenu(playerMenuUtility, main).open();
+			return;
+		}  else if (type == Material.DARK_OAK_BUTTON) {
 			if (ChatColor.stripColor(event.getCurrentItem().getItemMeta().getDisplayName())
 					.equalsIgnoreCase("Previous page")) {
 				if (page > 0) {
@@ -93,13 +108,28 @@ public class HomesMenu extends PaginatedMenu {
 	@Override
 	public void setMenuItems() {
 		addMenuBorder();
-		inventory.setItem(4, createItem(Material.FILLED_MAP, ChatColor.GREEN + "Create a new home",
-				ChatColor.GRAY + "Click here to set a new home in", ChatColor.GRAY + "your current location"));
-
-		if (playerMenuUtility.getPlayer().hasPermission("homes.admin")) {
-			inventory.setItem(53, createItem(Material.NETHER_STAR, ChatColor.GREEN + "Admin panel",
-					ChatColor.GRAY + "Click here to open the admin panel"));
+		
+		if (this.playerUniqueId == null) {
+			inventory.setItem(4, createItem(Material.FILLED_MAP, ChatColor.GREEN + "Create a new home",
+					ChatColor.GRAY + "Click here to set a new home in", ChatColor.GRAY + "your current location"));
+			if (playerMenuUtility.getPlayer().hasPermission("homes.admin")) {
+				inventory.setItem(53, createItem(Material.NETHER_STAR, ChatColor.GREEN + "Admin panel",
+						ChatColor.GRAY + "Click here to open the admin panel"));
+			}
+		} else {
+			ItemStack item = new ItemStack(Material.PLAYER_HEAD);
+			SkullMeta meta = (SkullMeta) item.getItemMeta();
+			OfflinePlayer player = Bukkit.getOfflinePlayer(this.playerUniqueId);
+			meta.setOwningPlayer(player);
+			meta.setDisplayName(ChatColor.GREEN + player.getName());
+			meta.setLore(Arrays.asList(ChatColor.GRAY + "You are viewing " + ChatColor.WHITE
+					+ player.getName() + ChatColor.GRAY + "'s homes"));
+			item.setItemMeta(meta);
+			inventory.setItem(4, item);
+			inventory.setItem(49, createItem(Material.ARROW, ChatColor.GREEN + "Back",
+					ChatColor.GRAY + "Click here to go back to the admin panel menu"));
 		}
+		
 
 		List<Home> playerHomes = main.getHomeDao().getPlayerHomes(playerMenuUtility.getPlayer().getUniqueId());
 		if (!playerHomes.isEmpty()) {

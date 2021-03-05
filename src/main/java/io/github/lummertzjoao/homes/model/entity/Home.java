@@ -17,18 +17,18 @@ public class Home {
 	private final Location location;
 	private Material icon;
 
-	public Home(String name, UUID playerUniqueId) {
+	public Home(String name, UUID ownerUniqueId) {
 		this.id = ID_GENERATOR.getAndIncrement();
 		this.name = name;
-		this.location = Bukkit.getPlayer(playerUniqueId).getLocation();
-		this.ownerUniqueId = playerUniqueId;
+		this.location = Bukkit.getPlayer(ownerUniqueId).getLocation();
+		this.ownerUniqueId = ownerUniqueId;
 		this.icon = Material.RED_BED;
 	}
 
-	public Home(int id, String name, UUID playerUniqueId, Location location, Material icon) {
+	public Home(int id, String name, UUID ownerUniqueId, Location location, Material icon) {
 		this.id = id;
 		this.name = name;
-		this.ownerUniqueId = playerUniqueId;
+		this.ownerUniqueId = ownerUniqueId;
 		this.location = location;
 		this.icon = icon;
 	}
