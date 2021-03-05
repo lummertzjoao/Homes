@@ -34,6 +34,7 @@ public class HomeNamePrompt extends StringPrompt {
 
 		if (input.equalsIgnoreCase("cancel")) {
 			player.sendRawMessage(CommonUtils.ERROR_MESSAGE_PREFIX + "Action canceled.");
+			new HomesMenu(playerMenuUtility, menu.getMain()).open();
 			return END_OF_CONVERSATION;
 		}
 
@@ -42,6 +43,7 @@ public class HomeNamePrompt extends StringPrompt {
 				.anyMatch(x -> x.getName().equalsIgnoreCase(input))) {
 			player.sendRawMessage(CommonUtils.ERROR_MESSAGE_PREFIX + "Home " + ChatColor.GOLD + input + ChatColor.RED
 					+ " already exists. Action canceled.");
+			new HomesMenu(playerMenuUtility, menu.getMain()).open();
 			return END_OF_CONVERSATION;
 		}
 

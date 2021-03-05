@@ -113,7 +113,7 @@ public class HomesMenu extends PaginatedMenu {
 			inventory.setItem(4, createItem(Material.FILLED_MAP, ChatColor.GREEN + "Create a new home",
 					ChatColor.GRAY + "Click here to set a new home in", ChatColor.GRAY + "your current location"));
 			if (playerMenuUtility.getPlayer().hasPermission("homes.admin")) {
-				inventory.setItem(53, createItem(Material.NETHER_STAR, ChatColor.GREEN + "Admin panel",
+				inventory.setItem(main.getHomesMenuSize() - 1, createItem(Material.NETHER_STAR, ChatColor.GREEN + "Admin panel",
 						ChatColor.GRAY + "Click here to open the admin panel"));
 			}
 		} else {
@@ -126,15 +126,15 @@ public class HomesMenu extends PaginatedMenu {
 					+ player.getName() + ChatColor.GRAY + "'s homes"));
 			item.setItemMeta(meta);
 			inventory.setItem(4, item);
-			inventory.setItem(49, createItem(Material.ARROW, ChatColor.GREEN + "Back",
-					ChatColor.GRAY + "Click here to go back to the admin panel menu"));
+			inventory.setItem(main.getHomesMenuSize() - 5, createItem(Material.ARROW, ChatColor.GREEN + "Back",
+					ChatColor.GRAY + "Click here to go back to the player selection menu"));
 		}
 		
 
 		List<Home> playerHomes = main.getHomeDao().getPlayerHomes(playerMenuUtility.getPlayer().getUniqueId());
 		if (!playerHomes.isEmpty()) {
-			for (int i = 0; i < maxItemsPerPage; i++) {
-				index = maxItemsPerPage * page + i;
+			for (int i = 0; i < getMaxItemsPerPage(); i++) {
+				index = getMaxItemsPerPage() * page + i;
 				if (index >= playerHomes.size())
 					break;
 				Home home = playerHomes.get(index);
@@ -161,6 +161,6 @@ public class HomesMenu extends PaginatedMenu {
 
 	@Override
 	public int getSlots() {
-		return 54;
+		return main.getHomesMenuSize();
 	}
 }

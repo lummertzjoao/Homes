@@ -26,7 +26,7 @@ public class Main extends JavaPlugin {
 		homeDao = DaoFactory.createHomeDao(this);
 		homeDao.setup();
 		saveDefaultConfig();
-		
+
 		conversationFactory = new ConversationFactory(this);
 		getCommand("homes").setExecutor(new HomesCommand(this));
 		getServer().getPluginManager().registerEvents(new MenuListener(), this);
@@ -67,6 +67,20 @@ public class Main extends JavaPlugin {
 	
 	public void setHomesLimit(int limit) {
 		getConfig().set("homesLimit", limit);
+		saveConfig();
+	}
+	
+	public int getHomesMenuSize() {
+		int size = getConfig().getInt("homesMenuSize");
+		if (size % 9 == 0 && size >= 27 && size <= 54) {
+			return size;
+		} else {
+			throw new IllegalStateException("The homes menu size needs to be 27, 36, 45 or 54");
+		}
+	}
+	
+	public void setHomesMenuSize(int size) {
+		getConfig().set("homesMenuSize", size);
 		saveConfig();
 	}
 }

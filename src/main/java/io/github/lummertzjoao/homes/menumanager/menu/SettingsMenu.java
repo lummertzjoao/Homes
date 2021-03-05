@@ -28,7 +28,7 @@ public class SettingsMenu extends Menu {
 			conversation.begin();
 			break;
 		case ITEM_FRAME:
-			// open size selection menu
+			new SizeSelectionMenu(playerMenuUtility, main).open();
 			break;
 		case ARROW:
 			new AdminPanelMenu(playerMenuUtility, main).open();

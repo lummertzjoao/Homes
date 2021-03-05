@@ -80,8 +80,8 @@ public class PlayerSelectionMenu extends PaginatedMenu {
 
 		List<UUID> players = main.getHomeDao().getAllPlayers();
 		if (!players.isEmpty()) {
-			for (int i = 0; i < maxItemsPerPage; i++) {
-				index = maxItemsPerPage * page + i;
+			for (int i = 0; i < getMaxItemsPerPage(); i++) {
+				index = getMaxItemsPerPage() * page + i;
 				if (index >= players.size())
 					break;
 				UUID uuid = players.get(index);
