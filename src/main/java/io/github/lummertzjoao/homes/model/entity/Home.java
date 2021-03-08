@@ -1,7 +1,6 @@
 package io.github.lummertzjoao.homes.model.entity;
 
 import java.util.UUID;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -9,23 +8,21 @@ import org.bukkit.Material;
 
 public class Home {
 
-	private static final AtomicInteger ID_GENERATOR = new AtomicInteger(0);
-	
-	private final int id;
+	private Integer id;
 	private String name;
 	private final UUID ownerUniqueId;
 	private final Location location;
 	private Material icon;
 
-	public Home(String name, UUID ownerUniqueId) {
-		this.id = ID_GENERATOR.getAndIncrement();
+	public Home(Integer id, String name, UUID ownerUniqueId) {
+		this.id = id;
 		this.name = name;
 		this.location = Bukkit.getPlayer(ownerUniqueId).getLocation();
 		this.ownerUniqueId = ownerUniqueId;
 		this.icon = Material.RED_BED;
 	}
 
-	public Home(int id, String name, UUID ownerUniqueId, Location location, Material icon) {
+	public Home(Integer id, String name, UUID ownerUniqueId, Location location, Material icon) {
 		this.id = id;
 		this.name = name;
 		this.ownerUniqueId = ownerUniqueId;
@@ -33,8 +30,12 @@ public class Home {
 		this.icon = icon;
 	}
 
-	public int getId() {
+	public Integer getId() {
 		return id;
+	}
+	
+	public void setId(Integer id) {
+		this.id = id;
 	}
 	
 	public String getName() {

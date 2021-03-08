@@ -10,6 +10,7 @@ import io.github.lummertzjoao.homes.menumanager.Menu;
 import io.github.lummertzjoao.homes.menumanager.PlayerMenuUtility;
 import io.github.lummertzjoao.homes.menumanager.menu.HomeEditMenu;
 import io.github.lummertzjoao.homes.menumanager.menu.HomesMenu;
+import io.github.lummertzjoao.homes.model.dao.HomeDao;
 import io.github.lummertzjoao.homes.model.entity.Home;
 import io.github.lummertzjoao.homes.util.CommonUtils;
 
@@ -58,7 +59,8 @@ public class HomeNamePrompt extends StringPrompt {
 	}
 
 	private void createHome(String input, Player player) {
-		menu.getMain().getHomeDao().insert(new Home(input, player.getUniqueId()));
+		HomeDao dao = menu.getMain().getHomeDao();
+		dao.insert(new Home(dao.getNextId(), input, player.getUniqueId()));
 		player.sendRawMessage(CommonUtils.INFO_MESSAGE_PREFIX + "Home " + ChatColor.GOLD + input + ChatColor.GREEN
 				+ " has been set.");
 	}

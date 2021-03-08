@@ -22,7 +22,7 @@ public interface HomeDao {
 	Home findById(int id);
 
 	List<Home> findAll();
-
+	
 	default List<Home> getPlayerHomes(UUID ownerUniqueId) {
 		return findAll().stream().filter(x -> x.getOwnerUniqueId().equals(ownerUniqueId)).collect(Collectors.toList());
 	}
@@ -34,5 +34,15 @@ public interface HomeDao {
 				players.add(home.getOwnerUniqueId());
 		}
 		return players;
+	}
+	
+	default Integer getNextId() {
+		List<Home> homes = this.findAll();
+		int id = 0;
+		for (Home home : homes) {
+			if (home.getId() > id)
+				id = home.getId();
+		}
+		return id + 1;
 	}
 }

@@ -42,7 +42,7 @@ public class HomeDaoYaml implements HomeDao {
 			e.printStackTrace();
 		}
 	}
-
+	
 	@Override
 	public void save() {
 		try {
