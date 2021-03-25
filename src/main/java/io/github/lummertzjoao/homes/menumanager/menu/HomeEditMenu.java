@@ -45,7 +45,7 @@ public class HomeEditMenu extends Menu {
 
 	@Override
 	public void setMenuItems() {
-		addMenuBorder();
+		super.addMenuBorder();
 		
 		inventory.setItem(20, createItem(Material.PAPER, ChatColor.YELLOW + "Rename",
 				ChatColor.GRAY + "Click here to rename this home"));
@@ -57,25 +57,6 @@ public class HomeEditMenu extends Menu {
 						ChatColor.GRAY + "This action can not be undone"));
 		inventory.setItem(40, createItem(Material.ARROW, ChatColor.RED + "Back",
 				ChatColor.GRAY + "Click here to go back to the homes menu"));
-	}
-	
-	public void addMenuBorder() {
-		for (int i = 0; i < 10; i++) {
-			if (inventory.getItem(i) == null) {
-				inventory.setItem(i, FILLER_GLASS);
-			}
-		}
-
-		inventory.setItem(17, FILLER_GLASS);
-		inventory.setItem(18, FILLER_GLASS);
-		inventory.setItem(26, FILLER_GLASS);
-		inventory.setItem(27, FILLER_GLASS);
-
-		for (int i = 35; i < 45; i++) {
-			if (inventory.getItem(i) == null) {
-				inventory.setItem(i, FILLER_GLASS);
-			}
-		}
 	}
 
 	@Override

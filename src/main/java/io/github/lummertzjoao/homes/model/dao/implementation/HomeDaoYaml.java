@@ -42,7 +42,7 @@ public class HomeDaoYaml implements HomeDao {
 			e.printStackTrace();
 		}
 	}
-	
+
 	@Override
 	public void save() {
 		try {
@@ -54,12 +54,27 @@ public class HomeDaoYaml implements HomeDao {
 
 	@Override
 	public void insert(Home home) {
-		String path = "homes." + home.getId();
+		String path = null;
+		if (home.getId() != null && findById(home.getId()) == null) {
+			path = "homes." + home.getId();
+		} else {
+			path = "homes." + getNextId();
+		}
 		homesDataConfig.set(path + ".homeName", home.getName());
 		homesDataConfig.set(path + ".ownerUniqueId", home.getOwnerUniqueId().toString());
 		homesDataConfig.set(path + ".location", home.getLocation());
 		homesDataConfig.set(path + ".icon", home.getIcon().toString());
 		this.save();
+	}
+
+	private Integer getNextId() {
+		List<Home> homes = this.findAll();
+		int id = 0;
+		for (Home home : homes) {
+			if (home.getId() > id)
+				id = home.getId();
+		}
+		return id + 1;
 	}
 
 	@Override
@@ -72,18 +87,23 @@ public class HomeDaoYaml implements HomeDao {
 	}
 
 	@Override
-	public void deleteById(int id) {
+	public void deleteById(Integer id) {
 		homesDataConfig.set("homes." + id, null);
 		this.save();
 	}
 
 	@Override
-	public Home findById(int id) {
+	public Home findById(Integer id) {
 		String homeName = homesDataConfig.getString("homes." + id + ".homeName");
 		String ownerUniqueId = homesDataConfig.getString("homes." + id + ".ownerUniqueId");
 		Location location = homesDataConfig.getLocation("homes." + id + ".location");
 		Material icon = Material.valueOf(homesDataConfig.getString("homes." + id + ".icon"));
-		return new Home(id, homeName, UUID.fromString(ownerUniqueId), location, icon);
+
+		if (homeName != null && ownerUniqueId != null && location != null && icon != null)
+			return new Home(id, homeName, UUID.fromString(ownerUniqueId), location, icon);
+		else
+			return null;
+
 	}
 
 	public List<Home> findAll() {
@@ -91,7 +111,7 @@ public class HomeDaoYaml implements HomeDao {
 		if (homesDataConfig.getConfigurationSection("homes") == null)
 			return found;
 		for (String id : homesDataConfig.getConfigurationSection("homes").getKeys(false))
-			found.add(this.findById(Integer.parseInt(id)));
+			found.add(findById(Integer.valueOf(id)));
 		return found;
 	}
 }

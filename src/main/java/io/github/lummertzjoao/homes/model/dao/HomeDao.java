@@ -17,9 +17,9 @@ public interface HomeDao {
 
 	void update(Home home);
 
-	void deleteById(int id);
+	void deleteById(Integer id);
 
-	Home findById(int id);
+	Home findById(Integer id);
 
 	List<Home> findAll();
 	
@@ -34,15 +34,5 @@ public interface HomeDao {
 				players.add(home.getOwnerUniqueId());
 		}
 		return players;
-	}
-	
-	default Integer getNextId() {
-		List<Home> homes = this.findAll();
-		int id = 0;
-		for (Home home : homes) {
-			if (home.getId() > id)
-				id = home.getId();
-		}
-		return id + 1;
 	}
 }

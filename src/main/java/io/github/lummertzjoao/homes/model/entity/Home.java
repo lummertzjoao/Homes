@@ -14,8 +14,8 @@ public class Home {
 	private final Location location;
 	private Material icon;
 
-	public Home(Integer id, String name, UUID ownerUniqueId) {
-		this.id = id;
+	public Home(String name, UUID ownerUniqueId) {
+		this.id = null;
 		this.name = name;
 		this.location = Bukkit.getPlayer(ownerUniqueId).getLocation();
 		this.ownerUniqueId = ownerUniqueId;
@@ -66,7 +66,7 @@ public class Home {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + id;
+		result = (int) (prime * result + id);
 		return result;
 	}
 

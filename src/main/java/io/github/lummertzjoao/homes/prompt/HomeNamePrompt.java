@@ -10,7 +10,6 @@ import io.github.lummertzjoao.homes.menumanager.Menu;
 import io.github.lummertzjoao.homes.menumanager.PlayerMenuUtility;
 import io.github.lummertzjoao.homes.menumanager.menu.HomeEditMenu;
 import io.github.lummertzjoao.homes.menumanager.menu.HomesMenu;
-import io.github.lummertzjoao.homes.model.dao.HomeDao;
 import io.github.lummertzjoao.homes.model.entity.Home;
 import io.github.lummertzjoao.homes.util.CommonUtils;
 
@@ -35,7 +34,7 @@ public class HomeNamePrompt extends StringPrompt {
 
 		if (input.equalsIgnoreCase("cancel")) {
 			player.sendRawMessage(CommonUtils.ERROR_MESSAGE_PREFIX + "Action canceled.");
-			new HomesMenu(playerMenuUtility, menu.getMain()).open();
+			menu.open();
 			return END_OF_CONVERSATION;
 		}
 
@@ -44,7 +43,7 @@ public class HomeNamePrompt extends StringPrompt {
 				.anyMatch(x -> x.getName().equalsIgnoreCase(input))) {
 			player.sendRawMessage(CommonUtils.ERROR_MESSAGE_PREFIX + "Home " + ChatColor.GOLD + input + ChatColor.RED
 					+ " already exists. Action canceled.");
-			new HomesMenu(playerMenuUtility, menu.getMain()).open();
+			menu.open();
 			return END_OF_CONVERSATION;
 		}
 
@@ -54,13 +53,12 @@ public class HomeNamePrompt extends StringPrompt {
 			renameHome(playerMenuUtility.getSelectedHome(), input, player);
 		}
 
-		new HomesMenu(playerMenuUtility, menu.getMain()).open();
+		menu.open();
 		return END_OF_CONVERSATION;
 	}
 
 	private void createHome(String input, Player player) {
-		HomeDao dao = menu.getMain().getHomeDao();
-		dao.insert(new Home(dao.getNextId(), input, player.getUniqueId()));
+		menu.getMain().getHomeDao().insert(new Home(input, player.getUniqueId()));
 		player.sendRawMessage(CommonUtils.INFO_MESSAGE_PREFIX + "Home " + ChatColor.GOLD + input + ChatColor.GREEN
 				+ " has been set.");
 	}

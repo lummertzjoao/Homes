@@ -1,0 +1,11 @@
+homes-limit: 10
+homes-menu-size: 36
+mysql:
+  enabled: false
+  hostname: 'your_hostname_here'
+  port: 'your_port_here'
+  database: 'your_database_here'
+  username: 'your_username_here'
+  password: 'your_password_here'
+yaml:
+  caching: disabled

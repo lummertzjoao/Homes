@@ -65,7 +65,7 @@ public class SizeSelectionMenu extends Menu {
 				size.setItemMeta(meta);
 			}
 		}
-
+		
 		inventory.setItem(10, twentySeven);
 		inventory.setItem(12, thirtySix);
 		inventory.setItem(14, fortyFive);

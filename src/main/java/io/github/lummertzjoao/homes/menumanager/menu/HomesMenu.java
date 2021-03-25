@@ -27,16 +27,16 @@ import io.github.lummertzjoao.homes.util.CommonUtils;
 
 public class HomesMenu extends PaginatedMenu {
 
-	private final UUID playerUniqueId;
-	
+	private final UUID otherPlayerUniqueId;
+
 	public HomesMenu(PlayerMenuUtility playerMenuUtility, Main main) {
 		super(playerMenuUtility, main);
-		playerUniqueId = null;
+		otherPlayerUniqueId = null;
 	}
-	
-	public HomesMenu(PlayerMenuUtility playerMenuUtility, Main main, UUID player) {
+
+	public HomesMenu(PlayerMenuUtility playerMenuUtility, Main main, UUID otherPlayerUniqueId) {
 		super(playerMenuUtility, main);
-		this.playerUniqueId = player;
+		this.otherPlayerUniqueId = otherPlayerUniqueId;
 	}
 
 	@Override
@@ -52,20 +52,19 @@ public class HomesMenu extends PaginatedMenu {
 						.withFirstPrompt(new HomeNamePrompt(this)).buildConversation(player);
 				conversation.begin();
 			} else {
-				player.sendMessage(
-						CommonUtils.ERROR_MESSAGE_PREFIX + "You have reached the maximum number of homes.");
+				player.sendMessage(CommonUtils.ERROR_MESSAGE_PREFIX + "You have reached the maximum number of homes.");
 			}
 			return;
 		} else if (CommonUtils.icons.contains(type)) {
 			Home selectedHome = null;
-			
+
 			NamespacedKey key = new NamespacedKey(main, "home-id");
 			ItemStack item = event.getCurrentItem();
 			PersistentDataContainer container = item.getItemMeta().getPersistentDataContainer();
 			if (container.has(key, PersistentDataType.INTEGER)) {
 				selectedHome = main.getHomeDao().findById(container.get(key, PersistentDataType.INTEGER));
 			}
-			
+
 			if (event.isLeftClick()) {
 				player.teleport(selectedHome.getLocation());
 				player.sendMessage(CommonUtils.INFO_MESSAGE_PREFIX + "You have been teleported to home "
@@ -83,7 +82,7 @@ public class HomesMenu extends PaginatedMenu {
 		} else if (type == Material.ARROW) {
 			new PlayerSelectionMenu(playerMenuUtility, main).open();
 			return;
-		}  else if (type == Material.DARK_OAK_BUTTON) {
+		} else if (type == Material.DARK_OAK_BUTTON) {
 			if (ChatColor.stripColor(event.getCurrentItem().getItemMeta().getDisplayName())
 					.equalsIgnoreCase("Previous page")) {
 				if (page > 0) {
@@ -108,28 +107,27 @@ public class HomesMenu extends PaginatedMenu {
 	@Override
 	public void setMenuItems() {
 		addMenuBorder();
-		
-		if (this.playerUniqueId == null) {
+
+		if (this.otherPlayerUniqueId == null) {
 			inventory.setItem(4, createItem(Material.FILLED_MAP, ChatColor.GREEN + "Create a new home",
 					ChatColor.GRAY + "Click here to set a new home in", ChatColor.GRAY + "your current location"));
 			if (playerMenuUtility.getPlayer().hasPermission("homes.admin")) {
-				inventory.setItem(main.getHomesMenuSize() - 1, createItem(Material.NETHER_STAR, ChatColor.GREEN + "Admin panel",
-						ChatColor.GRAY + "Click here to open the admin panel"));
+				inventory.setItem(main.getHomesMenuSize() - 1, createItem(Material.NETHER_STAR,
+						ChatColor.GREEN + "Admin panel", ChatColor.GRAY + "Click here to open the admin panel"));
 			}
 		} else {
 			ItemStack item = new ItemStack(Material.PLAYER_HEAD);
 			SkullMeta meta = (SkullMeta) item.getItemMeta();
-			OfflinePlayer player = Bukkit.getOfflinePlayer(this.playerUniqueId);
+			OfflinePlayer player = Bukkit.getOfflinePlayer(this.otherPlayerUniqueId);
 			meta.setOwningPlayer(player);
 			meta.setDisplayName(ChatColor.GREEN + player.getName());
-			meta.setLore(Arrays.asList(ChatColor.GRAY + "You are viewing " + ChatColor.WHITE
-					+ player.getName() + ChatColor.GRAY + "'s homes"));
+			meta.setLore(Arrays.asList(ChatColor.GRAY + "You are viewing " + ChatColor.WHITE + player.getName()
+					+ ChatColor.GRAY + "'s homes"));
 			item.setItemMeta(meta);
 			inventory.setItem(4, item);
 			inventory.setItem(main.getHomesMenuSize() - 5, createItem(Material.ARROW, ChatColor.GREEN + "Back",
 					ChatColor.GRAY + "Click here to go back to the player selection menu"));
 		}
-		
 
 		List<Home> playerHomes = main.getHomeDao().getPlayerHomes(playerMenuUtility.getPlayer().getUniqueId());
 		if (!playerHomes.isEmpty()) {
@@ -145,8 +143,8 @@ public class HomesMenu extends PaginatedMenu {
 					meta.setLore(
 							Arrays.asList(ChatColor.WHITE + "Left click " + ChatColor.GRAY + "to teleport to this home",
 									ChatColor.WHITE + "Right click " + ChatColor.GRAY + "to edit this home"));
-					meta.getPersistentDataContainer().set(new NamespacedKey(main, "home-id"),
-							PersistentDataType.INTEGER, home.getId());
+					meta.getPersistentDataContainer().set(new NamespacedKey(main, "home-id"), PersistentDataType.INTEGER,
+							home.getId());
 					item.setItemMeta(meta);
 					inventory.addItem(item);
 				}

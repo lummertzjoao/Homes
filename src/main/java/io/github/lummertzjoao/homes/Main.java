@@ -23,8 +23,7 @@ public class Main extends JavaPlugin {
 
 	@Override
 	public void onEnable() {
-		homeDao = DaoFactory.createHomeDao(this);
-		homeDao.setup();
+		this.setHomeDao(DaoFactory.createHomeDao(this));
 		saveDefaultConfig();
 
 		conversationFactory = new ConversationFactory(this);
@@ -46,14 +45,18 @@ public class Main extends JavaPlugin {
 		return homeDao;
 	}
 	
+	public void setHomeDao(HomeDao homeDao) {
+		homeDao.setup();
+		this.homeDao = homeDao;
+	}
+	
 	public ConversationFactory getConversationFactory() {
 		return conversationFactory;
 	}
 
 	public PlayerMenuUtility getPlayerMenuUtility(Player player) {
-		PlayerMenuUtility playerMenuUtility;
 		if (!(playerMenuUtilityMap.containsKey(player))) {
-			playerMenuUtility = new PlayerMenuUtility(player);
+			PlayerMenuUtility playerMenuUtility = new PlayerMenuUtility(player);
 			playerMenuUtilityMap.put(player, playerMenuUtility);
 			return playerMenuUtility;
 		} else {
@@ -62,25 +65,29 @@ public class Main extends JavaPlugin {
 	}
 	
 	public int getHomesLimit() {
-		return getConfig().getInt("homesLimit");
+		return getConfig().getInt("homes-limit");
 	}
 	
 	public void setHomesLimit(int limit) {
-		getConfig().set("homesLimit", limit);
+		getConfig().set("homes-limit", limit);
 		saveConfig();
 	}
 	
 	public int getHomesMenuSize() {
-		int size = getConfig().getInt("homesMenuSize");
+		int size = getConfig().getInt("homes-menu-size");
 		if (size % 9 == 0 && size >= 27 && size <= 54) {
 			return size;
 		} else {
-			throw new IllegalStateException("The homes menu size needs to be 27, 36, 45 or 54");
+			throw new IllegalStateException("The homes menu size must be 27, 36, 45 or 54");
 		}
 	}
 	
 	public void setHomesMenuSize(int size) {
-		getConfig().set("homesMenuSize", size);
+		getConfig().set("homes-menu-size", size);
 		saveConfig();
+	}
+	
+	public boolean isCachingEnabled() {
+		return getConfig().getBoolean("yaml.caching");
 	}
 }

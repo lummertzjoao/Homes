@@ -30,6 +30,9 @@ public class SettingsMenu extends Menu {
 		case ITEM_FRAME:
 			new SizeSelectionMenu(playerMenuUtility, main).open();
 			break;
+		case CHEST:
+			new DatabaseSelectionMenu(playerMenuUtility, main).open();
+			break;
 		case ARROW:
 			new AdminPanelMenu(playerMenuUtility, main).open();
 			break;
@@ -44,9 +47,12 @@ public class SettingsMenu extends Menu {
 				createItem(Material.OAK_DOOR, ChatColor.GREEN + "Homes limit",
 						ChatColor.GRAY + "Click here to change the homes limit",
 						ChatColor.GRAY + "Current: " + ChatColor.WHITE + main.getHomesLimit()));
-		inventory.setItem(15, createItem(Material.ITEM_FRAME, ChatColor.GREEN + "Homes menu size",
-				ChatColor.GRAY + "Click here to change the homes menu size"));
-		inventory.setItem(22, createItem(Material.ARROW, ChatColor.RED + "Back",
+		inventory.setItem(13, createItem(Material.ITEM_FRAME, ChatColor.GREEN + "Homes menu size",
+				ChatColor.GRAY + "Click here to change the homes menu size",
+				ChatColor.GRAY + "Current: " + ChatColor.WHITE + main.getHomesMenuSize()));
+		inventory.setItem(15, createItem(Material.CHEST, ChatColor.GREEN + "Database",
+				ChatColor.GRAY + "Click here to select the database"));
+		inventory.setItem(31, createItem(Material.ARROW, ChatColor.RED + "Back",
 				ChatColor.GRAY + "Click here to go back to the admin panel"));
 	}
 
@@ -57,6 +63,6 @@ public class SettingsMenu extends Menu {
 
 	@Override
 	public int getSlots() {
-		return 27;
+		return 36;
 	}
 }
