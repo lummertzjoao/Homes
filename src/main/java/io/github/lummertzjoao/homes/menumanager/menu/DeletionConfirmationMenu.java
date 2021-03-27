@@ -12,8 +12,11 @@ import io.github.lummertzjoao.homes.util.CommonUtils;
 
 public class DeletionConfirmationMenu extends Menu {
 
-	public DeletionConfirmationMenu(PlayerMenuUtility playerMenuUtility, Main main) {
+	private final boolean adminView;
+	
+	public DeletionConfirmationMenu(PlayerMenuUtility playerMenuUtility, Main main, boolean adminView) {
 		super(playerMenuUtility, main);
+		this.adminView = adminView;
 	}
 
 	@Override
@@ -21,13 +24,17 @@ public class DeletionConfirmationMenu extends Menu {
 		Home selectedHome = playerMenuUtility.getSelectedHome();
 		switch (event.getCurrentItem().getType()) {
 		case RED_WOOL:
-			new HomeEditMenu(playerMenuUtility, main).open();
+			new HomeEditMenu(playerMenuUtility, main, adminView).open();
 			break;
 		case LIME_WOOL:
 			main.getHomeDao().deleteById(selectedHome.getId());
 			event.getWhoClicked().sendMessage(CommonUtils.INFO_MESSAGE_PREFIX + "Deleted home " + ChatColor.GOLD
 					+ selectedHome.getName() + ChatColor.GREEN + " successfully.");
-			new HomesMenu(playerMenuUtility, main).open();
+			if (adminView) {
+				new HomesMenu(playerMenuUtility, main, selectedHome.getOwnerUniqueId()).open();
+			} else {
+				new HomesMenu(playerMenuUtility, main).open();
+			}
 			break;
 		default:
 			break;

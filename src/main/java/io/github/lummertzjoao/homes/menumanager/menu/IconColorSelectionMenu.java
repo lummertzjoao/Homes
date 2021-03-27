@@ -20,11 +20,14 @@ import io.github.lummertzjoao.homes.util.CommonUtils;
 
 public class IconColorSelectionMenu extends Menu {
 
+	private final boolean adminView;
+	
 	private final Set<Material> iconColors = new HashSet<>();
 
-	public IconColorSelectionMenu(PlayerMenuUtility playerMenuUtility, Main main) {
+	public IconColorSelectionMenu(PlayerMenuUtility playerMenuUtility, Main main, boolean adminView) {
 		super(playerMenuUtility, main);
-
+		this.adminView = adminView;
+		
 		for (Material icon : CommonUtils.icons) {
 			iconColors.add(CommonUtils.getColorFromIcon(icon));
 		}
@@ -33,19 +36,25 @@ public class IconColorSelectionMenu extends Menu {
 	@Override
 	public void onInventoryClick(InventoryClickEvent event) {
 		Material type = event.getCurrentItem().getType();
-
+		Home selectedHome = playerMenuUtility.getSelectedHome();
+		
 		if (iconColors.contains(type)) {
 			if (type == CommonUtils.getColorFromIcon(playerMenuUtility.getSelectedHome().getIcon()))
 				return;
-			Home home = playerMenuUtility.getSelectedHome();
-			home.setIcon(CommonUtils.getIconFromColor(type));
-			main.getHomeDao().update(home);
+			
+			selectedHome.setIcon(CommonUtils.getIconFromColor(type));
+			main.getHomeDao().update(selectedHome);
 			String name = CommonUtils.getColorName(type);
 			playerMenuUtility.getPlayer().sendMessage(
 					CommonUtils.INFO_MESSAGE_PREFIX + "Selected " + ChatColor.GOLD + name + ChatColor.GREEN + "icon.");
-			new HomesMenu(playerMenuUtility, main).open();
+			
+			if (adminView) {
+				new HomesMenu(playerMenuUtility, main, selectedHome.getOwnerUniqueId()).open();
+			} else {
+				new HomesMenu(playerMenuUtility, main).open();
+			}
 		} else if (type == Material.ARROW) {
-			new HomeEditMenu(playerMenuUtility, main).open();
+			new HomeEditMenu(playerMenuUtility, main, adminView).open();
 		}
 	}
 
@@ -72,25 +81,6 @@ public class IconColorSelectionMenu extends Menu {
 
 		inventory.setItem(40, createItem(Material.ARROW, ChatColor.RED + "Back",
 				ChatColor.GRAY + "Click here to go back to the home edit menu"));
-	}
-
-	public void addMenuBorder() {
-		for (int i = 0; i < 10; i++) {
-			if (inventory.getItem(i) == null) {
-				inventory.setItem(i, FILLER_GLASS);
-			}
-		}
-
-		inventory.setItem(17, FILLER_GLASS);
-		inventory.setItem(18, FILLER_GLASS);
-		inventory.setItem(26, FILLER_GLASS);
-		inventory.setItem(27, FILLER_GLASS);
-
-		for (int i = 35; i < 45; i++) {
-			if (inventory.getItem(i) == null) {
-				inventory.setItem(i, FILLER_GLASS);
-			}
-		}
 	}
 
 	@Override

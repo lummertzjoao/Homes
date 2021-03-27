@@ -5,15 +5,15 @@ import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.NumericPrompt;
 import org.bukkit.conversations.Prompt;
 
-import io.github.lummertzjoao.homes.Main;
+import io.github.lummertzjoao.homes.menumanager.Menu;
 import io.github.lummertzjoao.homes.util.CommonUtils;
 
 public class HomesLimitPrompt extends NumericPrompt {
 
-	private final Main main;
+	private final Menu menu;
 
-	public HomesLimitPrompt(Main main) {
-		this.main = main;
+	public HomesLimitPrompt(Menu menu) {
+		this.menu = menu;
 	}
 
 	@Override
@@ -27,16 +27,19 @@ public class HomesLimitPrompt extends NumericPrompt {
 		int value = input.intValue();
 		if (value == 0) {
 			context.getForWhom().sendRawMessage(CommonUtils.INFO_MESSAGE_PREFIX + "Action canceled.");
+			menu.open();
 			return END_OF_CONVERSATION;
+			
 		}
 		if (value < 0) {
 			context.getForWhom().sendRawMessage(CommonUtils.ERROR_MESSAGE_PREFIX
 					+ "The homes limit must be greater than " + ChatColor.GOLD + "0" + ChatColor.RED + ".");
 			return this;
 		}
-		main.setHomesLimit(value);
+		menu.getMain().setHomesLimit(value);
 		context.getForWhom().sendRawMessage(CommonUtils.INFO_MESSAGE_PREFIX + "Changed homes limit to " + ChatColor.GOLD
 				+ value + ChatColor.GREEN + ".");
+		menu.open();
 		return END_OF_CONVERSATION;
 	}
 

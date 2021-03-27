@@ -54,7 +54,6 @@ public class HomesMenu extends PaginatedMenu {
 			} else {
 				player.sendMessage(CommonUtils.ERROR_MESSAGE_PREFIX + "You have reached the maximum number of homes.");
 			}
-			return;
 		} else if (CommonUtils.icons.contains(type)) {
 			Home selectedHome = null;
 
@@ -71,17 +70,14 @@ public class HomesMenu extends PaginatedMenu {
 						+ ChatColor.GOLD + selectedHome.getName() + ChatColor.GREEN + ".");
 			} else {
 				playerMenuUtility.setSelectedHome(selectedHome);
-				new HomeEditMenu(playerMenuUtility, main).open();
+				new HomeEditMenu(playerMenuUtility, main, isAdminView()).open();
 			}
-			return;
 		} else if (type == Material.NETHER_STAR) {
 			new AdminPanelMenu(playerMenuUtility, main).open();
 		} else if (type == Material.DARK_OAK_DOOR) {
 			player.closeInventory();
-			return;
 		} else if (type == Material.ARROW) {
 			new PlayerSelectionMenu(playerMenuUtility, main).open();
-			return;
 		} else if (type == Material.DARK_OAK_BUTTON) {
 			if (ChatColor.stripColor(event.getCurrentItem().getItemMeta().getDisplayName())
 					.equalsIgnoreCase("Previous page")) {
@@ -100,7 +96,6 @@ public class HomesMenu extends PaginatedMenu {
 					player.sendMessage(CommonUtils.ERROR_MESSAGE_PREFIX + ChatColor.RED + "You are on the last page.");
 				}
 			}
-			return;
 		}
 	}
 
@@ -108,7 +103,7 @@ public class HomesMenu extends PaginatedMenu {
 	public void setMenuItems() {
 		addMenuBorder();
 
-		if (this.otherPlayerUniqueId == null) {
+		if (!isAdminView()) {
 			inventory.setItem(4, createItem(Material.FILLED_MAP, ChatColor.GREEN + "Create a new home",
 					ChatColor.GRAY + "Click here to set a new home in", ChatColor.GRAY + "your current location"));
 			if (playerMenuUtility.getPlayer().hasPermission("homes.admin")) {
@@ -151,7 +146,15 @@ public class HomesMenu extends PaginatedMenu {
 			}
 		}
 	}
+	
+	private boolean isAdminView() {
+		return getOtherPlayerUniqueId() != null;
+	}
 
+	public UUID getOtherPlayerUniqueId() {
+		return otherPlayerUniqueId;
+	}
+	
 	@Override
 	public String getMenuName() {
 		return "Homes";

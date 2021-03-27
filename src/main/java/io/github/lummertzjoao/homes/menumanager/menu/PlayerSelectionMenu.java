@@ -48,7 +48,6 @@ public class PlayerSelectionMenu extends PaginatedMenu {
 			new HomesMenu(playerMenuUtility, main, selectedPlayer).open();
 		} else if (type == Material.ARROW) {
 			new AdminPanelMenu(playerMenuUtility, main).open();
-			return;
 		} else if (type == Material.DARK_OAK_BUTTON) {
 			if (ChatColor.stripColor(event.getCurrentItem().getItemMeta().getDisplayName())
 					.equalsIgnoreCase("Previous page")) {
@@ -67,7 +66,6 @@ public class PlayerSelectionMenu extends PaginatedMenu {
 					player.sendMessage(CommonUtils.ERROR_MESSAGE_PREFIX + ChatColor.RED + "You are on the last page.");
 				}
 			}
-			return;
 		}
 	}
 

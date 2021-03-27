@@ -24,7 +24,7 @@ public class SettingsMenu extends Menu {
 		case OAK_DOOR:
 			player.closeInventory();
 			Conversation conversation = main.getConversationFactory().withLocalEcho(false)
-					.withFirstPrompt(new HomesLimitPrompt(main)).buildConversation(player);
+					.withFirstPrompt(new HomesLimitPrompt(this)).buildConversation(player);
 			conversation.begin();
 			break;
 		case ITEM_FRAME:
