@@ -87,6 +87,24 @@ public class Main extends JavaPlugin {
 		saveConfig();
 	}
 	
+	public boolean isDelayToTeleportEnabled() {
+		return getConfig().getBoolean("delay-to-teleport.enabled");
+	}
+	
+	public int getDelayToTeleport() {
+		int seconds = getConfig().getInt("delay-to-teleport.seconds");
+		if (seconds > 0) {
+			return seconds;
+		} else {
+			throw new IllegalStateException("The seconds to teleport must be greater than 0");
+		}
+	}
+	
+	public void setDelayToTeleport(int seconds) {
+		getConfig().set("delay-to-teleport.seconds", seconds);
+		saveConfig();
+	}
+	
 	public boolean isCachingEnabled() {
 		return getConfig().getBoolean("yaml.caching");
 	}

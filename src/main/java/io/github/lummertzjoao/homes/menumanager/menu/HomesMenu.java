@@ -17,6 +17,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import io.github.lummertzjoao.homes.Main;
 import io.github.lummertzjoao.homes.menumanager.PaginatedMenu;
@@ -65,9 +66,8 @@ public class HomesMenu extends PaginatedMenu {
 			}
 
 			if (event.isLeftClick()) {
-				player.teleport(selectedHome.getLocation());
-				player.sendMessage(CommonUtils.INFO_MESSAGE_PREFIX + "You have been teleported to home "
-						+ ChatColor.GOLD + selectedHome.getName() + ChatColor.GREEN + ".");
+				player.closeInventory();
+				teleportToHome(selectedHome, player);
 			} else {
 				playerMenuUtility.setSelectedHome(selectedHome);
 				new HomeEditMenu(playerMenuUtility, main, isAdminView()).open();
@@ -96,6 +96,32 @@ public class HomesMenu extends PaginatedMenu {
 					player.sendMessage(CommonUtils.ERROR_MESSAGE_PREFIX + ChatColor.RED + "You are on the last page.");
 				}
 			}
+		}
+	}
+
+	private void teleportToHome(Home home, Player player) {
+		if (main.isDelayToTeleportEnabled()) {
+			new BukkitRunnable() {
+				int i = main.getDelayToTeleport();
+
+				@Override
+				public void run() {
+					if (i > 0) {
+						player.sendMessage(ChatColor.DARK_GRAY + " > " + ChatColor.GRAY + "You will be teleported in "
+								+ ChatColor.DARK_GRAY + i + ChatColor.GRAY + " second(s).");
+						i--;
+					} else {
+						player.teleport(home.getLocation());
+						player.sendMessage(CommonUtils.INFO_MESSAGE_PREFIX + "You have been teleported to home "
+								+ ChatColor.GOLD + home.getName() + ChatColor.GREEN + ".");
+						this.cancel();
+					}
+				}
+			}.runTaskTimer(main, 0L, 20L);
+		} else {
+			player.teleport(home.getLocation());
+			player.sendMessage(CommonUtils.INFO_MESSAGE_PREFIX + "You have been teleported to home " + ChatColor.GOLD
+					+ home.getName() + ChatColor.GREEN + ".");
 		}
 	}
 
@@ -138,15 +164,15 @@ public class HomesMenu extends PaginatedMenu {
 					meta.setLore(
 							Arrays.asList(ChatColor.WHITE + "Left click " + ChatColor.GRAY + "to teleport to this home",
 									ChatColor.WHITE + "Right click " + ChatColor.GRAY + "to edit this home"));
-					meta.getPersistentDataContainer().set(new NamespacedKey(main, "home-id"), PersistentDataType.INTEGER,
-							home.getId());
+					meta.getPersistentDataContainer().set(new NamespacedKey(main, "home-id"),
+							PersistentDataType.INTEGER, home.getId());
 					item.setItemMeta(meta);
 					inventory.addItem(item);
 				}
 			}
 		}
 	}
-	
+
 	private boolean isAdminView() {
 		return getOtherPlayerUniqueId() != null;
 	}
@@ -154,7 +180,7 @@ public class HomesMenu extends PaginatedMenu {
 	public UUID getOtherPlayerUniqueId() {
 		return otherPlayerUniqueId;
 	}
-	
+
 	@Override
 	public String getMenuName() {
 		return "Homes";

@@ -1,5 +1,8 @@
 homes-limit: 10
 homes-menu-size: 36
+delay-to-teleport:
+  enabled: true
+  seconds: 5
 mysql:
   enabled: false
   hostname: 'your_hostname_here'

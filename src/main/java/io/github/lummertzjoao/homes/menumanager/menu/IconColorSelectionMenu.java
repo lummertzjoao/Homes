@@ -85,7 +85,7 @@ public class IconColorSelectionMenu extends Menu {
 
 	@Override
 	public String getMenuName() {
-		return "Icon color selection menu";
+		return "Icon color selection";
 	}
 
 	@Override

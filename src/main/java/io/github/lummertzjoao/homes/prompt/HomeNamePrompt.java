@@ -33,7 +33,7 @@ public class HomeNamePrompt extends StringPrompt {
 		PlayerMenuUtility playerMenuUtility = menu.getMain().getPlayerMenuUtility(player);
 
 		if (input.equalsIgnoreCase("cancel")) {
-			player.sendRawMessage(CommonUtils.ERROR_MESSAGE_PREFIX + "Action canceled.");
+			player.sendRawMessage(CommonUtils.INFO_MESSAGE_PREFIX + "Action canceled.");
 			menu.open();
 			return END_OF_CONVERSATION;
 		}
