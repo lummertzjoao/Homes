@@ -12,14 +12,14 @@ public class Database {
 
 	private static Connection connection = null;
 
-	private static String hostname, port, database, username, password;
-
+	private static String hostname, port, database, username, password, table;
+	
 	public static Connection getConnection() {
 		if (connection == null) {
 			try {
 				Class.forName("com.mysql.jdbc.Driver");
 				connection = DriverManager.getConnection(
-						"jdbc:mysql://" + hostname + ":" + port + "/" + database + "?useSSL=false", username, password);
+						"jdbc:mysql://" + hostname + ":" + port + "/" + database, username, password);
 			} catch (SQLException e) {
 				e.printStackTrace();
 			} catch (ClassNotFoundException e) {
@@ -45,6 +45,7 @@ public class Database {
 		database = main.getConfig().getString("mysql.database");
 		username = main.getConfig().getString("mysql.username");
 		password = main.getConfig().getString("mysql.password");
+		table = main.getConfig().getString("mysql.table");
 	}
 
 	public static void closeStatement(Statement st) {
@@ -65,5 +66,9 @@ public class Database {
 				e.printStackTrace();
 			}
 		}
+	}
+	
+	public static String getTable() {
+		return table;
 	}
 }

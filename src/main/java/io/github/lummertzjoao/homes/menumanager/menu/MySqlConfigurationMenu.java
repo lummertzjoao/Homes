@@ -33,7 +33,7 @@ public class MySqlConfigurationMenu extends Menu {
 		Material type = item.getType();
 
 		Set<Material> mySqlConfigMaterials = Set.of(Material.NAME_TAG, Material.OAK_FENCE_GATE, Material.CHEST_MINECART,
-				Material.BOOK, Material.FEATHER);
+				Material.BOOK, Material.FEATHER, Material.KNOWLEDGE_BOOK);
 
 		if (mySqlConfigMaterials.contains(type)) {
 			String displayName = ChatColor.stripColor(item.getItemMeta().getDisplayName()).toUpperCase();
@@ -59,8 +59,7 @@ public class MySqlConfigurationMenu extends Menu {
 				main.getConfig().set("mysql.enabled", true);
 				main.saveConfig();
 				main.setHomeDao(DaoFactory.createHomeDao(main));
-				playerMenuUtility.getPlayer()
-						.sendMessage(CommonUtils.INFO_MESSAGE_PREFIX + "Changed database to MySQL");
+				playerMenuUtility.getPlayer().sendMessage(CommonUtils.INFO_MESSAGE_PREFIX + "Database set to MySQL.");
 				this.open();
 			}
 		} else if (type == Material.ARROW) {
@@ -93,22 +92,30 @@ public class MySqlConfigurationMenu extends Menu {
 				ChatColor.GRAY + "Click here to set the username");
 		ItemStack password = createItem(Material.FEATHER, ChatColor.GREEN + "Password",
 				ChatColor.GRAY + "Click here to set the password");
+		ItemStack table = createItem(Material.KNOWLEDGE_BOOK, ChatColor.GREEN + "Table",
+				ChatColor.GRAY + "Click here to set the table", "",
+				ChatColor.GRAY + "Current: " + ChatColor.WHITE + main.getConfig().getString("mysql.table"));
 
 		ItemStack[] dbProperties = { hostname, port, database, username, password };
 		for (ItemStack property : dbProperties) {
 			ItemMeta meta = property.getItemMeta();
 			String name = ChatColor.stripColor(meta.getDisplayName()).toLowerCase();
-			meta.getLore().add(ChatColor.GRAY + "Current: "
+			List<String> propertyLore = meta.getLore();
+			propertyLore.add("");
+			propertyLore.add(ChatColor.GRAY + "Current: "
 					+ (main.getConfig().getString("mysql." + name).equals("your_" + name + "_here")
-					? ChatColor.RED + "not set" : ChatColor.WHITE + main.getConfig().getString("mysql.name")));
+							? ChatColor.RED + "not set"
+							: ChatColor.WHITE + main.getConfig().getString("mysql." + name)));
+			meta.setLore(propertyLore);
 			property.setItemMeta(meta);
 		}
 
 		inventory.setItem(20, hostname);
 		inventory.setItem(22, port);
 		inventory.setItem(24, database);
-		inventory.setItem(30, username);
-		inventory.setItem(32, password);
+		inventory.setItem(29, username);
+		inventory.setItem(31, password);
+		inventory.setItem(33, table);
 
 		inventory.setItem(49, createItem(Material.ARROW, ChatColor.RED + "Back",
 				ChatColor.GRAY + "Click here to go back to the database selection menu"));

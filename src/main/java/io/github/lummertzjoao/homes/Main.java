@@ -24,21 +24,26 @@ public class Main extends JavaPlugin {
 	@Override
 	public void onEnable() {
 		this.setHomeDao(DaoFactory.createHomeDao(this));
-		saveDefaultConfig();
-
+		this.loadConfig();
+		
 		conversationFactory = new ConversationFactory(this);
 		getCommand("homes").setExecutor(new HomesCommand(this));
 		getServer().getPluginManager().registerEvents(new MenuListener(), this);
 		
 		getLogger().info("The plugin has been enabled successfully!");
 	}
-
+	
 	@Override
 	public void onDisable() {
 		homeDao.save();
 		saveConfig();
 		
 		getLogger().info("The plugin has been disabled successfully!");
+	}
+	
+	private void loadConfig() {
+		getConfig().options().copyDefaults(true);
+		saveConfig();
 	}
 	
 	public HomeDao getHomeDao() {

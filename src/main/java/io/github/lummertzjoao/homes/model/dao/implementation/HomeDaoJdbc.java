@@ -21,13 +21,32 @@ public class HomeDaoJdbc implements HomeDao {
 
 	private Connection connection;
 
-
 	public HomeDaoJdbc(Connection connection) {
 		this.connection = connection;
 	}
 
 	@Override
 	public void setup() {
+		PreparedStatement statement = null;
+		try {
+			statement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS `" + Database.getTable() + "` ("
+					+ "`id` int NOT NULL AUTO_INCREMENT," 
+					+ "`name` varchar(256) NOT NULL,"
+					+ "`owner_uid` varchar(36) NOT NULL," 
+					+ "`world_uid` varchar(36) NOT NULL,"
+					+ "`x` decimal(10) NOT NULL," 
+					+ "`y` decimal(10) NOT NULL," 
+					+ "`z` decimal(10) NOT NULL,"
+					+ "`yaw` decimal(10) NOT NULL," 
+					+ "`pitch` decimal(10) NOT NULL," 
+					+ "`icon` varchar(15) NOT NULL,"
+					+ "PRIMARY KEY (`id`));");
+			statement.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			Database.closeStatement(statement);
+		}
 	}
 
 	@Override
@@ -40,8 +59,9 @@ public class HomeDaoJdbc implements HomeDao {
 		PreparedStatement statement = null;
 
 		try {
-			statement = connection.prepareStatement("INSERT INTO homes "
-					+ "(name, owner_uid, world_uid, x, y, z, yaw, pitch, icon) " + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+			statement = connection.prepareStatement(
+					"INSERT INTO " + Database.getTable() + " (name, owner_uid, world_uid, x, y, z, yaw, pitch, icon) "
+							+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
 					Statement.RETURN_GENERATED_KEYS);
 			statement.setString(1, home.getName());
 			statement.setString(2, home.getOwnerUniqueId().toString());
@@ -73,7 +93,8 @@ public class HomeDaoJdbc implements HomeDao {
 		PreparedStatement statement = null;
 
 		try {
-			statement = connection.prepareStatement("UPDATE homes " + "SET name = ?, icon = ? " + "WHERE id = ?",
+			statement = connection.prepareStatement(
+					"UPDATE " + Database.getTable() + " SET name = ?, icon = ? " + "WHERE id = ?",
 					Statement.RETURN_GENERATED_KEYS);
 			statement.setString(1, home.getName());
 			statement.setString(2, home.getIcon().toString());
@@ -92,7 +113,7 @@ public class HomeDaoJdbc implements HomeDao {
 		PreparedStatement statement = null;
 
 		try {
-			statement = connection.prepareStatement("DELETE FROM homes WHERE id = ?");
+			statement = connection.prepareStatement("DELETE FROM " + Database.getTable() + " WHERE id = ?");
 			statement.setInt(1, id);
 
 			statement.executeUpdate();
@@ -109,7 +130,8 @@ public class HomeDaoJdbc implements HomeDao {
 		ResultSet rs = null;
 
 		try {
-			statement = connection.prepareStatement("SELECT homes.* FROM homes WHERE homes.id = ?");
+			statement = connection.prepareStatement("SELECT " + Database.getTable() + ".* FROM " + Database.getTable()
+					+ " WHERE " + Database.getTable() + ".id = ?");
 			statement.setInt(1, id);
 
 			rs = statement.executeQuery();
@@ -131,7 +153,7 @@ public class HomeDaoJdbc implements HomeDao {
 		ResultSet rs = null;
 
 		try {
-			statement = connection.prepareStatement("SELECT homes.* FROM homes");
+			statement = connection.prepareStatement("SELECT " + Database.getTable() + ".* FROM " + Database.getTable());
 			rs = statement.executeQuery();
 
 			List<Home> homes = new ArrayList<>();

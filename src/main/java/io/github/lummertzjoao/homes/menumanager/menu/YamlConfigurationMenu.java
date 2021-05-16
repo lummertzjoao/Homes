@@ -29,7 +29,7 @@ public class YamlConfigurationMenu extends Menu {
 				main.saveConfig();
 				main.setHomeDao(DaoFactory.createHomeDao(main));
 				playerMenuUtility.getPlayer()
-						.sendMessage(CommonUtils.INFO_MESSAGE_PREFIX + "Changed database to YAML file");
+						.sendMessage(CommonUtils.INFO_MESSAGE_PREFIX + "Database set to YAML file.");
 			}
 		case ARROW:
 			new DatabaseSelectionMenu(playerMenuUtility, main).open();

@@ -70,11 +70,11 @@ public class SettingsMenu extends Menu {
 	public void setMenuItems() {
 		inventory.setItem(10,
 				createItem(Material.OAK_DOOR, ChatColor.GREEN + "Homes limit",
-						ChatColor.GRAY + "Click here to change the homes limit",
+						ChatColor.GRAY + "Click here to set the homes limit",
 						ChatColor.GRAY + "Current: " + ChatColor.WHITE + main.getHomesLimit()));
 
 		inventory.setItem(12, createItem(Material.ITEM_FRAME, ChatColor.GREEN + "Homes menu size",
-				ChatColor.GRAY + "Click here to change the homes menu size"));
+				ChatColor.GRAY + "Click here to set the homes menu size"));
 
 		inventory.setItem(14, createItem(Material.CHEST, ChatColor.GREEN + "Database",
 				ChatColor.GRAY + "Click here to select the database"));

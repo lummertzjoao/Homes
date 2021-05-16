@@ -8,7 +8,7 @@ import io.github.lummertzjoao.homes.model.dao.implementation.HomeDaoYaml;
 public class DaoFactory {
 
 	public static HomeDao createHomeDao(Main main) {
-		if (main.getConfig().getBoolean("mysql.enabled"))  {
+		if (main.getConfig().getBoolean("mysql.enabled")) {
 			Database.loadProperties(main);
 			return new HomeDaoJdbc(Database.getConnection());
 		} else {
